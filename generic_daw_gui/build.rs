@@ -1,147 +1,30 @@
-use std::{collections::BTreeSet, fs::File, io::Write as _};
+use std::fs::File;
+use std::io::Write;
+use std::path::Path;
 
-static LUCIDE_BYTES: &[u8] = include_bytes!("../Lucide.ttf");
+fn main() {
+    println!("cargo:rerun-if-changed=../icons.ttf");
 
-macro_rules! icon {
-	($name:ident = $icon:literal) => {
-		icon!($name = $icon + 0.05)
-	};
-	($name:ident = $icon:literal + $offset:literal) => {
-		(
-			stringify!($name),
-			const { char::from_u32($icon).unwrap() },
-			$offset,
-		)
-	};
-}
+    let out_dir = std::env::var("OUT_DIR").unwrap();
+    let dest_path = Path::new(&out_dir).join("lucide_map.rs");
+    let mut f = File::create(&dest_path).unwrap();
 
-// https://unpkg.com/lucide-static@latest/font/codepoints.json
-static GLYPHS: &[(&str, char, f32)] = &[
-	icon!(chevron_down = 57453),
-	icon!(chevron_right = 57455),
-	icon!(chevron_up = 57456),
-	icon!(copy = 57502),
-	icon!(cpu = 57513),
-	icon!(file = 57536),
-	icon!(gavel = 57568),
-	icon!(grip_horizontal = 57578),
-	icon!(grip_vertical = 57579),
-	icon!(mic = 57624),
-	icon!(pause = 57646),
-	icon!(play = 57660),
-	icon!(plus = 57661 + 0.025),
-	icon!(power = 57664),
-	icon!(rotate_ccw = 57672),
-	icon!(save = 57677),
-	icon!(sliders_vertical = 57698),
-	icon!(snowflake = 57701),
-	icon!(square = 57703),
-	icon!(triangle_alert = 57747),
-	icon!(volume_2 = 57771),
-	icon!(x = 57778),
-	icon!(move_vertical = 57799 + 0.025),
-	icon!(arrow_big_right = 57827),
-	icon!(power_off = 57865),
-	icon!(hourglass = 58006),
-	icon!(file_headphone = 58138),
-	icon!(file_play = 58145),
-	icon!(circle_ellipsis = 58182),
-	icon!(arrow_up_down = 58237),
-	icon!(chart_no_axes_gantt = 58564),
-	icon!(file_music = 58718),
-	icon!(keyboard_music = 58720),
-	icon!(between_horizontal_start = 58770),
-	icon!(between_vertical_start = 58772),
-	icon!(chevrons_left_right_ellipsis = 58911),
-	icon!(metronome = 59068 + 0.025),
-];
+    writeln!(f, "pub static LUCIDE_MAP: ::once_cell::sync::Lazy<::std::collections::HashMap<char, u16>> = ::once_cell::sync::Lazy::new(|| {{").unwrap();
+    writeln!(f, "    let mut m = ::std::collections::HashMap::new();").unwrap();
 
-pub fn main() {
-	println!("cargo::rerun-if-changed=../Lucide.ttf");
+    let font_bytes = include_bytes!("../icons.ttf");
+    
+    if let Ok(font) = fontdue::Font::from_bytes(font_bytes as &[u8], fontdue::FontSettings::default()) {
+        for char_code in 0xe000..0xf300 {
+            if let Some(c) = std::char::from_u32(char_code) {
+                let glyph_id = font.lookup_glyph_index(c);
+                if glyph_id != 0 { 
+                    writeln!(f, "    m.insert({:?}, {});", c, glyph_id).unwrap();
+                }
+            }
+        }
+    }
 
-	let mut icons_rs = File::create("src/icons.rs").unwrap();
-
-	icons_rs
-		.write_all(
-			br#"// automatically generated
-
-use crate::widget::LINE_HEIGHT;
-use iced::{
-	Element, Font, padding,
-	widget::{container, text},
-};
-
-pub static LUCIDE_BYTES: &[u8] = include_bytes!("../../icons.ttf");
-pub static LUCIDE_FONT: Font = Font::new("lucide");
-
-#[derive(Clone, Copy, Debug)]
-pub struct Icon {
-	glyph: char,
-	size: f32,
-	offset: f32,
-}
-
-impl Icon {
-	pub const fn size(mut self, size: f32) -> Self {
-		self.size = size;
-		self
-	}
-
-	pub const fn glyph(self) -> char {
-		self.glyph
-	}
-}
-
-impl<'a, Message: 'a> From<Icon> for Element<'a, Message> {
-	fn from(value: Icon) -> Self {
-		container(
-			text(value.glyph)
-				.font(LUCIDE_FONT)
-				.shaping(text::Shaping::Basic)
-				.line_height(1.0)
-				.size(value.size)
-				.width(value.size)
-				.center(),
-		)
-		.padding(padding::top(value.offset * value.size).bottom(-value.offset * value.size))
-		.into()
-	}
-}
-"#,
-		)
-		.unwrap();
-
-	let mut subset = BTreeSet::new();
-
-	for &(name, glyph, offset) in GLYPHS {
-		subset.insert(glyph);
-		icons_rs
-			.write_all(
-				format!(
-					"
-pub const fn {name}() -> Icon {{
-	Icon {{
-		glyph: {glyph:?},
-		size: LINE_HEIGHT,
-		offset: {offset},
-	}}
-}}
-"
-				)
-				.as_bytes(),
-			)
-			.unwrap();
-	}
-
-	std::fs::write(
-		"../icons.ttf",
-		font_subset::FontReader::new(LUCIDE_BYTES)
-			.unwrap()
-			.read()
-			.unwrap()
-			.subset(&subset)
-			.unwrap()
-			.to_opentype(),
-	)
-	.unwrap();
+    writeln!(f, "    m").unwrap();
+    writeln!(f, "}});").unwrap();
 }

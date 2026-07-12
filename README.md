@@ -1,11 +1,10 @@
 <div align="center">
 
-# Generic DAW
+# HIKARU OPENSTUDIO (powered by Generic DAW)
 
 [![Iced](https://img.shields.io/badge/0.15-blue?logo=iced&style=for-the-badge)](https://github.com/iced-rs/iced)
-[![GPLv3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge)](https://github.com/generic-daw/generic-daw/blob/master/LICENSE)
-[![CI](https://img.shields.io/github/actions/workflow/status/generic-daw/generic-daw/rust.yml?style=for-the-badge&label=CI)](https://github.com/generic-daw/generic-daw/actions/workflows/rust.yml)
-[![Deps](https://deps.rs/repo/github/generic-daw/generic-daw/status.svg?style=for-the-badge)](https://deps.rs/repo/github/generic-daw/generic-daw)
+[![AGPLv3](https://img.shields.io/badge/License-AGPLv3-blue.svg?style=for-the-badge)](https://github.com/hikarucorporation/hikaru_openstudio/blob/main/LICENSE)
+[![Deps](https://deps.rs/repo/github/hikarucorporation/hikaru_openstudio/status.svg?style=for-the-badge)](https://deps.rs/repo/github/hikarucorporation/hikaru_openstudio)
 
 An early-in-development, open source, cross-platform digital audio workstation (DAW) built in Rust.
 </div>
@@ -33,7 +32,7 @@ Binaries are built for x64 Windows and Linux, as well as ARM MacOS. If you're si
 Run the following shell commands to clone the source code and compile a release build:
 
 ```
-git clone https://github.com/generic-daw/generic-daw.git
+git clone https://github.com/hikarucorporation/hikaru_openstudio.git
 cd generic-daw
 curl https://unpkg.com/lucide-static@latest/font/Lucide.ttf -Lo Lucide.ttf
 cargo build --release
@@ -53,5 +52,5 @@ This project adheres to the [Rust Audio AI policy](https://rust.audio/community/
 
 ## License
 
-Generic DAW is licensed under the [GPLv3 License](https://www.gnu.org/licenses/gpl-3.0).
+Generic DAW is licensed under the [AGPLv3 License](https://www.gnu.org/licenses/agpl-3.0.en.html).
 By contributing to Generic DAW, you agree that your contributions will be licensed under the GPLv3 as well.
