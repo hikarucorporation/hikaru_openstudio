@@ -52,5 +52,5 @@ This project adheres to the [Rust Audio AI policy](https://rust.audio/community/
 
 ## License
 
-Generic DAW is licensed under the [AGPLv3 License](https://www.gnu.org/licenses/agpl-3.0.en.html).
-By contributing to Generic DAW, you agree that your contributions will be licensed under the GPLv3 as well.
+Hikaru OpenStudio is licensed under the [AGPLv3 License](https://www.gnu.org/licenses/agpl-3.0.en.html).
+By contributing to Hikaru OpenStudio, you agree that your contributions will be licensed under the AGPLv3 as well.
