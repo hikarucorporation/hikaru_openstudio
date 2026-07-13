@@ -8,6 +8,7 @@ members = [
 	"generic_daw_widget",
 	"thread_pool",
 	"utils",
+    "vst_host",
 ]
 resolver = "3"
 
@@ -21,6 +22,7 @@ generic_daw_project.path = "generic_daw_project"
 generic_daw_widget.path = "generic_daw_widget"
 thread_pool.path = "thread_pool"
 utils.path = "utils"
+vst_host.path = "vst_host"
 
 [workspace.package]
 version = "0.0.0"
