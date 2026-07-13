@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (C) 2026 Hikaru Corporation - OpenStudio VST3 Host
+
 use vst3::Steinberg::TUID;
 
 pub struct PClassInfo {
@@ -5,7 +8,6 @@ pub struct PClassInfo {
     pub category: [i8; 32],
 }
 
-// Dejamos este por si check_factory_info lo necesita localmente
 pub struct PluginDescriptor {
     pub class_id: [i8; 16],
 }
@@ -27,8 +29,6 @@ pub fn check_factory_info(info: &PClassInfo) -> Option<PluginDescriptor> {
     None
 }
 
-// Al usar un segundo parámetro genérico P, a Rust no le importa de qué módulo venga 
-// el struct que maneja el closure. Se adapta dinámicamente al tipo real de lib.rs.
 pub fn enumerate_audio_effects<F, P>(_module: &super::module::Module, _f: &mut F) -> Result<(), super::module::Vst3Error> 
 where
     F: FnMut(P),
