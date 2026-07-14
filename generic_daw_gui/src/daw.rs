@@ -355,12 +355,12 @@ impl Daw {
 			}
 			Message::FileTree(message) => return self.handle_file_tree_message(message),
 			Message::ConfigView(message) => {
-				if let Some(config_view) = self.config_view.as_mut() {
-					return config_view
-						.update(message)
-						.handle(Message::ConfigView, |config| {
-							self.update(Message::MergeConfig(config.into()))
-						});
+				if let Some(mut config_view) = self.config_view.take() {
+					let task = config_view.update(message);
+					self.config_view = Some(config_view);
+					return task.map(|config| {
+						Message::MergeConfig(config.into())
+					});
 				}
 			}
 			Message::CloseRequested(window) => {
@@ -1120,12 +1120,15 @@ impl Daw {
 			keyboard::listen().filter_map(|event| match event {
 				keyboard::Event::KeyPressed {
 					key,
-					physical_key,
 					modifiers,
 					repeat,
 					..
 				} => ConfigView::keybinds(&key, modifiers, repeat)
-					.or_else(|| Self::keybinds(&key, physical_key, modifiers, repeat)),
+					.map(Message::ConfigView)
+					.or_else(|| {
+						// Si no es un atajo de config_view, lo dejamos caer al keybind general pasándole un physical dummy
+						Self::keybinds(&key, keyboard::key::Physical::Unidentified(keyboard::key::NativeCode::Unidentified), modifiers, repeat)
+					}),
 				_ => None,
 			})
 		} else {
