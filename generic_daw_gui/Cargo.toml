@@ -38,6 +38,7 @@ smol = "2.0.2"
 sweeten = { git = "https://github.com/edwloef/sweeten.git", branch = "generic-daw" }
 toml = "1.1.2"
 walkdir = "2.5.0"
+vst3_host = { version = "0.0.0", path = "../vst_host" }
 
 [build-dependencies]
 font-subset = "0.1.0"

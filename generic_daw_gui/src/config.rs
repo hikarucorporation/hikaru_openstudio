@@ -21,6 +21,7 @@ pub static CONFIG_PATH: LazyLock<Arc<Path>> =
 pub struct Config {
 	pub sample_paths: Vec<Arc<Path>>,
 	pub clap_paths: Vec<Arc<Path>>,
+	pub vst3_paths: Vec<Arc<Path>>,
 	pub input_device: Device,
 	pub output_device: Device,
 	pub autosave: Autosave,
@@ -34,6 +35,7 @@ impl Default for Config {
 		Self {
 			sample_paths: vec![DATA_DIR.clone()],
 			clap_paths: Vec::new(),
+			vst3_paths: Vec::new(),
 			input_device: Device::default(),
 			output_device: Device::default(),
 			autosave: Autosave::default(),

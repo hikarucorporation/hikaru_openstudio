@@ -63,6 +63,7 @@ By contributing to Hikaru OpenStudio, you agree that your contributions will be 
 Hikaru OpenStudio's VST Host is licensed under the [LGPLv3 License](https://www.gnu.org/licenses/lgpl-3.0.en.html)
 
 ![vst_clap_logos](assets/vst_clap_logos.png)
+
 ![lgplv3_logo](assets/lgplv3-with-text-154x68.png)
 
 [Generic DAW](https://github.com/generic-daw/generic-daw) is licensed under the [GPLv3 License](https://www.gnu.org/licenses/gpl-3.0.en.html)

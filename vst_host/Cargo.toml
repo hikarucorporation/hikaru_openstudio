@@ -1,0 +1,15 @@
+[package]
+name = "vst3_host"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+vst3-sys = { git = "https://github.com/RustAudio/vst3-sys" }
+libloading = "0.8"
+log = "0.4"
+walkdir = "2"
+vst3 = "0.3.0"
+
+[lints]
+workspace = true
