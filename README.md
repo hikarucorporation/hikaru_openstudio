@@ -5,10 +5,20 @@
 [![Iced](https://img.shields.io/badge/0.15-blue?logo=iced&style=for-the-badge)](https://github.com/iced-rs/iced)
 [![AGPLv3](https://img.shields.io/badge/License-AGPLv3-blue.svg?style=for-the-badge)](https://github.com/hikarucorporation/hikaru_openstudio/blob/main/LICENSE)
 
-An early-in-development, open source, cross-platform digital audio workstation (DAW) built in Rust.
+## An Advanced Futuristic AGPL Digital Audio Workstation for UNIX sysadmins and Bass Music Producers, full-made in Rust.
+</div>
+Coming soon: An fully free and open software wavetable and spectral advanced Hikaru OpenStudio's native VST3 synthesis and effects.
 </div>
 
-![screenshot](assets/screenshot.png)
+---
+
+![screenshot](assets/VST_FKNG_WORKS.png)
+
+*Sure, Hikaru OpenStudio have a funcionallity GNU Lesser VST3 Host but is fking broken and bugged...
+
+*Meh, i tried, idk...
+
+*My english sucks hehe, i'm from Argentina (FVCK **Falklands**, me and homies ever called **Malvinas Argentinas** 4Ever)
 
 ## Running
 
@@ -45,7 +55,7 @@ The binary will then be located at `./target/release/generic_daw`.
 
 ## Contributing
 
-Contributions are welcome on [GitHub](https://github.com/hikarucorporation/hikaru_openstudio). If you'd like to work on a larger feature or bugfix, coordinating your work with what I'm currently doing is generally a good idea, to ensure conflicts stay at a minimum. If that's the case, feel free to get in touch via a [GitHub discussion](https://github.com/hikarucorporation/hikaru_openstudio/discussions) or on Discord.
+Contributions and forks are welcome on [GitHub](https://github.com/hikarucorporation/hikaru_openstudio).
 
 This project adheres to the [Rust Audio AI policy](https://rust.audio/community/ai).
 
@@ -71,3 +81,11 @@ Hikaru OpenStudio's VST Host is licensed under the [LGPLv3 License](https://www.
 ![gplv3_logo](assets/gplv3-with-text-136x68.png)
 
 Hikaru OpenStudio is free and open-source software.
+
+## Final Notes:
+
+# 🇦🇷🇦🇷🇦🇷 Las Malvinas siempre y serán Argentinas hasta el final de los tiempos. 🇦🇷🇦🇷🇦🇷 #
+
+![islas_malvinas](assets/islas_malvinas.png)
+
+---
