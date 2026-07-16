@@ -43,7 +43,12 @@ struct IPluginFactoryVtbl {
         index: i32,
         info: *mut PClassInfo,
     ) -> i32,
-    create_instance: *const c_void,
+    create_instance: unsafe extern "system" fn(
+        this: *mut *const IPluginFactoryVtbl,
+        cid: *const i8,
+        iid: *const c_void,
+        obj: *mut *mut c_void,
+    ) -> i32,
 }
 
 #[repr(C)]
@@ -55,7 +60,12 @@ struct IPluginFactory2Vtbl {
     get_factory_info: *const c_void,
     count_classes: unsafe extern "system" fn(this: *mut *const IPluginFactory2Vtbl) -> i32,
     get_class_info: unsafe extern "system" fn(this: *mut *const IPluginFactory2Vtbl, index: i32, info: *mut PClassInfo) -> i32,
-    create_instance: *const c_void,
+    create_instance: unsafe extern "system" fn(
+        this: *mut *const IPluginFactoryVtbl,
+        cid: *const i8,
+        iid: *const c_void,
+        obj: *mut *mut c_void,
+    ) -> i32,
     // Métodos de IPluginFactory2
     get_class_info2: unsafe extern "system" fn(
         this: *mut *const IPluginFactory2Vtbl,
@@ -178,4 +188,32 @@ where
     }
 
     Ok(())
+}
+
+
+/// Crea una instancia del plugin usando su class_id binario
+pub fn create_instance(module: &Module, class_id: &[i8; 16]) -> *mut c_void {
+    let factory_ptr = module.get_factory_ptr();
+    if factory_ptr.is_null() {
+        return std::ptr::null_mut();
+    }
+
+    let factory = factory_ptr as *mut *const IPluginFactoryVtbl;
+    let mut obj: *mut c_void = std::ptr::null_mut();
+
+    unsafe {
+        let create_fn = (**factory).create_instance;
+        let res = (create_fn)(
+            factory,
+            class_id.as_ptr(),
+            IID_IUNKNOWN.as_ptr() as *const c_void,
+            &mut obj as *mut *mut c_void,
+        );
+
+        if res == kResultOk {
+            obj
+        } else {
+            std::ptr::null_mut()
+        }
+    }
 }

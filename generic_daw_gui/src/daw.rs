@@ -1213,48 +1213,14 @@ impl Daw {
 fn get_installed_plugins(config: &Config) -> Task<PluginDescriptor> {
 	let (sender, receiver) = smol::channel::unbounded();
 	let clap_paths = config.clap_paths.clone();
-	let vst3_paths = config.vst3_paths.clone();
-	let sender_vst3 = sender.clone();
 
 	Task::batch([
-		// 1. Escaneo de CLAP estándar
+		// Escaneo de CLAP nativos únicamente, para que el backend pueda instanciarlos y procesar audio de verdad
 		Task::future(unblock(move || {
 			generic_daw_core::clap_host::get_installed_plugins(
-				DEFAULT_CLAP_PATHS.iter().chain(&clap_paths),
+				DEFAULT_CLAP_PATHS.iter().chain(&clap_paths).filter(|p| { let s = p.to_string_lossy(); !s.contains("vst3") }),
 				|descriptor| _ = sender.try_send(descriptor),
 			);
-		}))
-		.discard(),
-		// 2. Escaneo de VST3 usando las rutas guardadas en la configuración
-		Task::future(unblock(move || {
-			println!("[DEBUG VST3] Hilo de escaneo iniciado.");
-			println!("[DEBUG VST3] Rutas a escanear: {:?}", vst3_paths);
-			if vst3_paths.is_empty() {
-				println!("[DEBUG VST3] ALERTA: La lista de rutas VST3 está VACÍA.");
-			}
-			vst3_host::get_installed_plugins(
-				&vst3_paths,
-				|descriptor| {
-					println!("[DEBUG VST3] ¡Se encontró un plugin en el host!: {}", descriptor.name);
-					// Convertimos el [i8; 16] a un String hexadecimal para crear el CString/CStr
-					let hex_id = descriptor.class_id.iter()
-						.map(|b| format!("{:02x}", *b as u8))
-						.collect::<String>();
-					let id_cstring = std::ffi::CString::new(hex_id).unwrap_or_default();
-
-					let mapped = PluginDescriptor {
-						id: std::sync::Arc::from(id_cstring.as_c_str()),
-						name: descriptor.name.into(),
-						path: std::sync::Arc::from(descriptor.module_path.to_string_lossy().into_owned()),
-					};
-					println!("[DEBUG VST3] Intentando enviar mapeado al canal: {}", mapped.name);
-					match sender_vst3.try_send(mapped) {
-						Ok(_) => println!("[DEBUG VST3] Enviado al canal con éxito."),
-						Err(e) => println!("[DEBUG VST3] Error al enviar al canal: {:?}", e),
-					}
-				},
-			);
-			println!("[DEBUG VST3] Hilo de escaneo finalizado.");
 		}))
 		.discard(),
 		Task::stream(receiver),

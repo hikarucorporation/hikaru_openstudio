@@ -41,6 +41,44 @@ static HOST: LazyLock<HostInfo> = LazyLock::new(|| {
 	)
 });
 
+/// Un wrapper para poder transferir tipos que no implementan Send a otros hilos de forma segura (ej. cpal::Stream)
+pub struct SafeSend<T>(pub T);
+
+unsafe impl<T> Send for SafeSend<T> {}
+unsafe impl<T> Sync for SafeSend<T> {}
+
+impl<T> std::ops::Deref for SafeSend<T> {
+	type Target = T;
+	fn deref(&self) -> &Self::Target {
+		&self.0
+	}
+}
+
+impl<T> std::ops::DerefMut for SafeSend<T> {
+	fn deref_mut(&mut self) -> &mut Self::Target {
+		&mut self.0
+	}
+}
+
+#[derive(Debug)]
+pub struct Arrangement {
+	transport: Transport,
+	load: Option<f32>,
+
+	samples: BTreeMap<SampleId, Sample>,
+	midi_patterns: BTreeMap<MidiPatternId, MidiPattern>,
+
+	tracks: Vec<Track>,
+	channels: Vec<Channel>,
+	master: NodeId,
+	nodes: BTreeMap<NodeId, (Node, BTreeMap<NodeId, f32>)>,
+
+	producer: Producer<Message>,
+	queue: VecDeque<Message>,
+	stream: Option<SafeSend<NoDebug<Stream>>>,
+}
+
+
 #[derive(Debug)]
 pub struct Arrangement {
 	transport: Transport,
@@ -57,6 +95,8 @@ pub struct Arrangement {
 	producer: Producer<Message>,
 	queue: VecDeque<Message>,
 	stream: Option<NoDebug<Stream>>,
+
+	stream: Option<NoDebug<Stream>>, 
 }
 
 impl Arrangement {
@@ -1087,6 +1127,7 @@ impl Arrangement {
 							SamplePair::from_core(
 								generic_daw_core::Sample {
 									id: SampleId::unique(),
+									data: NoDebug(samples.into()),
 									samples: NoDebug(samples.into()),
 									sample_rate: transport.sample_rate,
 								},

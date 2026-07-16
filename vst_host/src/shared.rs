@@ -4,7 +4,18 @@ use std::sync::{
 	atomic::{AtomicBool, AtomicU64, Ordering::Relaxed},
 	mpsc::Sender,
 };
-use utils::NoDebug;
+pub struct NoDebug<T>(pub T);
+impl<T> std::fmt::Debug for NoDebug<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Pointer")
+    }
+}
+impl<T> std::ops::Deref for NoDebug<T> {
+    type Target = T;
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
 use vst3_sys::vst::{IAudioProcessor, IComponent, IEditController};
 
 static NEXT_THREAD_ID: AtomicU64 = AtomicU64::new(0);
@@ -20,8 +31,8 @@ thread_local! {
 /// riesgo de un `queryInterface` fallido a mitad de audio processing).
 #[derive(Debug, Default)]
 pub struct Ext {
-	pub audio_processor: OnceLock<NoDebug<*mut IAudioProcessor>>,
-	pub edit_controller: OnceLock<NoDebug<*mut IEditController>>,
+	pub audio_processor: OnceLock<NoDebug<*mut dyn IAudioProcessor>>,
+	pub edit_controller: OnceLock<NoDebug<*mut dyn IEditController>>,
 }
 
 // SAFETY: los punteros COM crudos en `Ext` solo se leen tras `queryInterface`

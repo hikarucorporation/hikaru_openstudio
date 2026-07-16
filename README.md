@@ -1,6 +1,8 @@
 <div align="center">
 
-# HIKARU OPENSTUDIO (powered by Generic DAW)
+# HIKARU OPENSTUDIO # 
+
+**(powered by Generic DAW)**
 
 [![Iced](https://img.shields.io/badge/0.15-blue?logo=iced&style=for-the-badge)](https://github.com/iced-rs/iced)
 [![AGPLv3](https://img.shields.io/badge/License-AGPLv3-blue.svg?style=for-the-badge)](https://github.com/hikarucorporation/hikaru_openstudio/blob/main/LICENSE)

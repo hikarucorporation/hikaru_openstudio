@@ -4,6 +4,11 @@
 pub mod module;
 pub mod factory;
 pub mod plugin_descriptor;
+pub mod shared;
+pub mod audio_thread;
+pub mod plugin;
+pub mod host_application;
+pub use vst3_sys; // Esto hace que el módulo sea visible para otros crates
 
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
@@ -65,4 +70,13 @@ where
             }
         }
     }
+}
+
+/// Mensajes enviados desde el hilo de procesamiento de audio o la UI
+/// hacia el hilo principal de la aplicación.
+#[derive(Debug, Clone)]
+pub enum MainThreadMessage {
+    // Podés expandir esto más adelante según tus necesidades de comunicación
+    ParamChanged { index: u32, value: f32 },
+    RestartProcessor,
 }

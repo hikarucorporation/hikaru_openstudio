@@ -1,22 +1,23 @@
 [package]
 name = "generic_daw_core"
-version.workspace = true
-edition.workspace = true
-license.workspace = true
-
-[lints]
-workspace = true
+version = "0.0.0"
+edition = "2024"
 
 [dependencies]
-audio_graph.workspace = true
-clap_host.workspace = true
-dsp.workspace = true
-utils.workspace = true
+# Dependencias externas
+uuid = { version = "1.24", features = ["v4"] }
+symphonia = "0.5"
+oneshot = "0.1"
+hound = "3.5"
+midly = "0.5"
+cpal = "0.15"
+log = "0.4"
+rtrb = "0.3" 
 
-cpal = "0.18.1"
-hound = "3.5.1"
-log = "0.4.33"
-midly = { version = "0.5.3", default-features = false, features = ["std", "strict"] }
-oneshot = { version = "0.2.1", features = ["std"] }
-rtrb = "0.3.4"
-symphonia = { version = "0.6.0", features = ["all"] }
+# Dependencias locales (las que no encontraba)
+vst3_host = { path = "../vst_host" }
+audio_graph = { path = "../audio_graph" }
+clap_host = { path = "../clap_host" }
+dsp = { path = "../dsp" }
+utils = { path = "../utils" }
+thread_pool = { path = "../thread_pool" }
