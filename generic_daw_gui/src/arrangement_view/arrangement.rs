@@ -60,6 +60,24 @@ impl<T> std::ops::DerefMut for SafeSend<T> {
 	}
 }
 
+impl<T: std::fmt::Debug> std::fmt::Debug for SafeSend<T> {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		self.0.fmt(f)
+	}
+}
+
+impl<T> From<T> for SafeSend<T> {
+	fn from(value: T) -> Self {
+		Self(value)
+	}
+}
+
+impl From<generic_daw_core::Stream> for SafeSend<NoDebug<generic_daw_core::Stream>> {
+	fn from(value: generic_daw_core::Stream) -> Self {
+		Self(NoDebug(value))
+	}
+}
+
 #[derive(Debug)]
 pub struct Arrangement {
 	transport: Transport,
@@ -78,26 +96,6 @@ pub struct Arrangement {
 	stream: Option<SafeSend<NoDebug<Stream>>>,
 }
 
-
-#[derive(Debug)]
-pub struct Arrangement {
-	transport: Transport,
-	load: Option<f32>,
-
-	samples: BTreeMap<SampleId, Sample>,
-	midi_patterns: BTreeMap<MidiPatternId, MidiPattern>,
-
-	tracks: Vec<Track>,
-	channels: Vec<Channel>,
-	master: NodeId,
-	nodes: BTreeMap<NodeId, (Node, BTreeMap<NodeId, f32>)>,
-
-	producer: Producer<Message>,
-	queue: VecDeque<Message>,
-	stream: Option<NoDebug<Stream>>,
-
-	stream: Option<NoDebug<Stream>>, 
-}
 
 impl Arrangement {
 	pub fn create(
@@ -1127,7 +1125,6 @@ impl Arrangement {
 							SamplePair::from_core(
 								generic_daw_core::Sample {
 									id: SampleId::unique(),
-									data: NoDebug(samples.into()),
 									samples: NoDebug(samples.into()),
 									sample_rate: transport.sample_rate,
 								},

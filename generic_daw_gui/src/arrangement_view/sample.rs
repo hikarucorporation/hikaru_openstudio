@@ -34,13 +34,39 @@ pub struct SamplePair {
 }
 
 impl SamplePair {
+	pub fn new(path: Arc<Path>) -> Option<Self> {
+		let core = generic_daw_core::Sample::new(Box::from(File::open(&path).ok()?))?;
+		Self::from_core(core, path)
+	}
+
+	pub fn with_crc_and_len(crc: u32, len: u64, path: Arc<Path>) -> Option<Self> {
+		let core = generic_daw_core::Sample::new(Box::from(File::open(&path).ok()?))?;
+		Self::from_core_with_crc_and_len(core, crc, len, path)
+	}
+
+	pub fn from_core(core: generic_daw_core::Sample, path: Arc<Path>) -> Option<Self> {
+		let crc = crc(File::open(&path).ok()?);
+		let len = std::fs::metadata(&path).ok()?.len();
+		Self::from_core_with_crc_and_len(core, crc, len, path)
+	}
+
+	pub fn from_core_and_lods(
+		core: generic_daw_core::Sample,
+		lods: Lods,
+		path: Arc<Path>,
+	) -> Option<Self> {
+		let crc = crc(File::open(&path).ok()?);
+		let len = std::fs::metadata(&path).ok()?.len();
+		Self::from_core_and_lods_with_crc_and_len(core, lods, crc, len, path)
+	}
+
 	pub fn from_core_with_crc_and_len(
 		core: generic_daw_core::Sample,
 		crc: u32,
 		len: u64,
 		path: Arc<Path>,
 	) -> Option<Self> {
-		let lods = Lods::new(&core.data); 
+		let lods = Lods::new(&core.samples);
 		Self::from_core_and_lods_with_crc_and_len(core, lods, crc, len, path)
 	}
 
@@ -57,9 +83,8 @@ impl SamplePair {
 			lods,
 			path,
 			name,
-			samples: core.data.clone(),
-			sample_rate: std::num::NonZero::new(core.sample_rate)
-				.unwrap_or_else(|| std::num::NonZero::new(44100).unwrap()),
+			samples: core.samples.clone(),
+			sample_rate: core.sample_rate,
 			crc,
 			len,
 			refs: 0,

@@ -1,0 +1,489 @@
+warning: extern crate `font_subset` is unused in crate `build_script_build`
+  |
+  = help: remove the dependency or add `use font_subset as _;` to the crate root
+  = note: requested on the command line with `-W unused-crate-dependencies`
+
+warning: `generic_daw` (build script) generated 1 warning
+warning: extern crate `vst3` is unused in crate `vst3_host`
+ --> vst_host/src/lib.rs:4:1
+  |
+4 | pub mod module;
+  | ^
+  |
+  = help: remove the dependency or add `use vst3 as _;` to the crate root
+  = note: requested on the command line with `-W unused-crate-dependencies`
+
+warning: unused import: `IComponent`
+  --> vst_host/src/shared.rs:19:38
+   |
+19 | use vst3_sys::vst::{IAudioProcessor, IComponent, IEditController};
+   |                                      ^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `class_id_hex` is never used
+  --> vst_host/src/plugin_descriptor.rs:14:16
+   |
+13 | impl PluginDescriptor {
+   | --------------------- method in this implementation
+14 |     pub(crate) fn class_id_hex(&self) -> String {
+   |                   ^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `shared` is never read
+  --> vst_host/src/audio_thread.rs:12:5
+   |
+11 | pub struct AudioThread {
+   |            ----------- field in this struct
+12 |     shared: Arc<Shared>,
+   |     ^^^^^^
+
+warning: type could implement `Copy`; consider adding `impl Copy`
+  --> vst_host/src/lib.rs:78:1
+   |
+78 | / pub enum MainThreadMessage {
+79 | |     // Podés expandir esto más adelante según tus necesidades de comunicación
+80 | |     ParamChanged { index: u32, value: f32 },
+81 | |     RestartProcessor,
+82 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-copy-implementations`
+
+warning: type does not implement `std::fmt::Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> vst_host/src/host_application.rs:31:1
+   |
+31 | / pub struct HostApplication {
+32 | |     vtable: *const IHostApplicationVtbl,
+33 | |     shared: Arc<Shared>,
+34 | |     ref_count: std::sync::atomic::AtomicU32,
+35 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `vst3_host` (lib) generated 6 warnings (run `cargo fix --lib -p vst3_host` to apply 1 suggestion)
+   Compiling generic_daw_core v0.0.0 (/home/alex/Documentos/Codigo_Fuente/HIKARU_OPENSTUDIO/generic-daw/generic_daw_core)
+error[E0432]: unresolved imports `symphonia::core::codecs::audio`, `symphonia::core::formats::TrackType`, `symphonia::core::formats::probe`
+ --> generic_daw_core/src/sample.rs:4:10
+  |
+4 |     codecs::audio::AudioDecoderOptions,
+  |             ^^^^^ could not find `audio` in `codecs`
+5 |     formats::{FormatOptions, TrackType, probe::Hint},
+  |                              ^^^^^^^^^  ^^^^^ could not find `probe` in `formats`
+  |                              |
+  |                              no `TrackType` in `formats`
+
+error[E0432]: unresolved imports `cpal::DeviceDescription`, `cpal::DeviceId`
+  --> generic_daw_core/src/lib.rs:26:16
+   |
+26 | pub use cpal::{DeviceDescription, DeviceId, Stream};
+   |                ^^^^^^^^^^^^^^^^^  ^^^^^^^^ no `DeviceId` in the root
+   |                |
+   |                no `DeviceDescription` in the root
+   |
+help: a similar name exists in the module
+   |
+26 - pub use cpal::{DeviceDescription, DeviceId, Stream};
+26 + pub use cpal::{DeviceDescription, Device, Stream};
+   |
+
+error[E0599]: no variant, associated function, or constant named `PluginAdd` found for enum `NodeAction` in the current scope
+   --> generic_daw_core/src/channel.rs:161:16
+    |
+161 |             NodeAction::PluginAdd(id) => self.plugins.push(Plugin::new(id)),
+    |                         ^^^^^^^^^ variant, associated function, or constant not found in `NodeAction`
+    |
+   ::: generic_daw_core/src/audio_thread.rs:65:1
+    |
+ 65 | pub enum NodeAction {
+    | ------------------- variant, associated function, or constant `PluginAdd` not found for this enum
+
+error[E0599]: no variant, associated function, or constant named `Balance` found for enum `PanMode` in the current scope
+   --> generic_daw_core/src/channel.rs:217:19
+    |
+217 |                 pan: PanMode::Balance(0.0),
+    |                               ^^^^^^^ variant, associated function, or constant not found in `PanMode`
+
+error[E0599]: no method named `probe` found for reference `&'static Probe` in the current scope
+  --> generic_daw_core/src/sample.rs:27:5
+   |
+26 |           let mut format = symphonia::default::get_probe()
+   |  __________________________-
+27 | |             .probe(
+   | |             -^^^^^ method not found in `&'static Probe`
+   | |_____________|
+   |
+
+error[E0599]: no method named `make_audio_decoder` found for reference `&'static CodecRegistry` in the current scope
+  --> generic_daw_core/src/sample.rs:46:5
+   |
+45 |           let mut decoder = symphonia::default::get_codecs()
+   |  ___________________________-
+46 | |             .make_audio_decoder(codec_params, &AudioDecoderOptions::default())
+   | |             -^^^^^^^^^^^^^^^^^^ method not found in `&'static CodecRegistry`
+   | |_____________|
+   |
+
+error[E0599]: no method named `id` found for struct `Device` in the current scope
+  --> generic_daw_core/src/stream.rs:21:37
+   |
+21 |         .filter_map(|device| Some((device.id().ok()?, device.description().ok()?)))
+   |                                           ^^ method not found in `Device`
+
+error[E0599]: no method named `description` found for struct `Device` in the current scope
+  --> generic_daw_core/src/stream.rs:21:56
+   |
+21 |         .filter_map(|device| Some((device.id().ok()?, device.description().ok()?)))
+   |                                                              ^^^^^^^^^^^ method not found in `Device`
+
+error[E0599]: no method named `device_by_id` found for struct `Host` in the current scope
+  --> generic_daw_core/src/stream.rs:33:30
+   |
+33 |         .and_then(|device_id| host.device_by_id(device_id))
+   |                                    ^^^^^^^^^^^^
+   |
+help: there is a method `devices` with a similar name, but with different arguments
+  --> /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cpal-0.15.3/src/traits.rs:45:5
+   |
+45 |     fn devices(&self) -> Result<Self::Devices, DevicesError>;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no associated function or constant named `supports_input` found for struct `Device` in the current scope
+  --> generic_daw_core/src/stream.rs:34:19
+   |
+34 |         .filter(Device::supports_input)
+   |                         ^^^^^^^^^^^^^^ associated function or constant not found in `Device`
+
+error[E0277]: the trait bound `SampleRate: ZeroablePrimitive` is not satisfied
+  --> generic_daw_core/src/stream.rs:49:33
+   |
+49 |     let sample_rate = NonZero::new(config.sample_rate).unwrap();
+   |                       ------------ ^^^^^^^^^^^^^^^^^^ the nightly-only, unstable trait `ZeroablePrimitive` is not implemented for `SampleRate`
+   |                       |
+   |                       required by a bound introduced by this call
+   |
+   = help: the following other types implement trait `ZeroablePrimitive`:
+             char
+             i128
+             i16
+             i32
+             i64
+             i8
+             isize
+             u128
+           and 5 others
+note: required by a bound in `NonZero::<T>::new`
+  --> /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/num/nonzero.rs:404:4
+
+error[E0599]: the method `unwrap` exists for enum `Option<NonZero<SampleRate>>`, but its trait bounds were not satisfied
+   --> generic_daw_core/src/stream.rs:49:53
+    |
+ 49 |     let sample_rate = NonZero::new(config.sample_rate).unwrap();
+    |                                                        ^^^^^^ method cannot be called on `Option<NonZero<SampleRate>>` due to unsatisfied trait bounds
+    |
+   ::: /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cpal-0.15.3/src/lib.rs:197:1
+    |
+197 | pub struct SampleRate(pub u32);
+    | --------------------- doesn't satisfy `SampleRate: ZeroablePrimitive`
+    |
+    = note: the following trait bounds were not satisfied:
+            `SampleRate: ZeroablePrimitive`
+            which is required by `NonZero<SampleRate>: Sized`
+
+error[E0277]: the trait bound `SampleRate: ZeroablePrimitive` is not satisfied
+  --> generic_daw_core/src/stream.rs:49:20
+   |
+49 |     let sample_rate = NonZero::new(config.sample_rate).unwrap();
+   |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the nightly-only, unstable trait `ZeroablePrimitive` is not implemented for `SampleRate`
+   |
+   = help: the following other types implement trait `ZeroablePrimitive`:
+             char
+             i128
+             i16
+             i32
+             i64
+             i8
+             isize
+             u128
+           and 5 others
+note: required by a bound in `NonZero`
+  --> /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/num/nonzero.rs:128:0
+
+error[E0599]: no variant, associated function, or constant named `I24` found for enum `cpal::SampleFormat` in the current scope
+  --> generic_daw_core/src/stream.rs:74:17
+   |
+74 |         SampleFormat::I24 => I24,
+   |                       ^^^ variant, associated function, or constant not found in `cpal::SampleFormat`
+   |
+help: there is a variant with a similar name
+   |
+74 -         SampleFormat::I24 => I24,
+74 +         SampleFormat::I64 => I24,
+   |
+
+error[E0599]: no variant, associated function, or constant named `U24` found for enum `cpal::SampleFormat` in the current scope
+  --> generic_daw_core/src/stream.rs:79:17
+   |
+79 |         SampleFormat::U24 => U24,
+   |                       ^^^ variant, associated function, or constant not found in `cpal::SampleFormat`
+   |
+help: there is a variant with a similar name
+   |
+79 -         SampleFormat::U24 => U24,
+79 +         SampleFormat::U64 => U24,
+   |
+
+error[E0599]: no method named `device_by_id` found for struct `Host` in the current scope
+   --> generic_daw_core/src/stream.rs:101:30
+    |
+101 |         .and_then(|device_id| host.device_by_id(device_id))
+    |                                    ^^^^^^^^^^^^
+    |
+help: there is a method `devices` with a similar name, but with different arguments
+   --> /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cpal-0.15.3/src/traits.rs:45:5
+    |
+ 45 |     fn devices(&self) -> Result<Self::Devices, DevicesError>;
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no associated function or constant named `supports_output` found for struct `Device` in the current scope
+   --> generic_daw_core/src/stream.rs:102:19
+    |
+102 |         .filter(Device::supports_output)
+    |                         ^^^^^^^^^^^^^^^ associated function or constant not found in `Device`
+
+error[E0277]: the trait bound `SampleRate: ZeroablePrimitive` is not satisfied
+   --> generic_daw_core/src/stream.rs:117:33
+    |
+117 |     let sample_rate = NonZero::new(config.sample_rate).unwrap();
+    |                       ------------ ^^^^^^^^^^^^^^^^^^ the nightly-only, unstable trait `ZeroablePrimitive` is not implemented for `SampleRate`
+    |                       |
+    |                       required by a bound introduced by this call
+    |
+    = help: the following other types implement trait `ZeroablePrimitive`:
+              char
+              i128
+              i16
+              i32
+              i64
+              i8
+              isize
+              u128
+            and 5 others
+note: required by a bound in `NonZero::<T>::new`
+   --> /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/num/nonzero.rs:404:4
+
+error[E0599]: the method `unwrap` exists for enum `Option<NonZero<SampleRate>>`, but its trait bounds were not satisfied
+   --> generic_daw_core/src/stream.rs:117:53
+    |
+117 |     let sample_rate = NonZero::new(config.sample_rate).unwrap();
+    |                                                        ^^^^^^ method cannot be called on `Option<NonZero<SampleRate>>` due to unsatisfied trait bounds
+    |
+   ::: /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cpal-0.15.3/src/lib.rs:197:1
+    |
+197 | pub struct SampleRate(pub u32);
+    | --------------------- doesn't satisfy `SampleRate: ZeroablePrimitive`
+    |
+    = note: the following trait bounds were not satisfied:
+            `SampleRate: ZeroablePrimitive`
+            which is required by `NonZero<SampleRate>: Sized`
+
+error[E0277]: the trait bound `SampleRate: ZeroablePrimitive` is not satisfied
+   --> generic_daw_core/src/stream.rs:117:20
+    |
+117 |     let sample_rate = NonZero::new(config.sample_rate).unwrap();
+    |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the nightly-only, unstable trait `ZeroablePrimitive` is not implemented for `SampleRate`
+    |
+    = help: the following other types implement trait `ZeroablePrimitive`:
+              char
+              i128
+              i16
+              i32
+              i64
+              i8
+              isize
+              u128
+            and 5 others
+note: required by a bound in `NonZero`
+   --> /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/num/nonzero.rs:128:0
+
+error[E0599]: no variant, associated function, or constant named `I24` found for enum `cpal::SampleFormat` in the current scope
+   --> generic_daw_core/src/stream.rs:140:17
+    |
+140 |         SampleFormat::I24 => I24,
+    |                       ^^^ variant, associated function, or constant not found in `cpal::SampleFormat`
+    |
+help: there is a variant with a similar name
+    |
+140 -         SampleFormat::I24 => I24,
+140 +         SampleFormat::I64 => I24,
+    |
+
+error[E0599]: no variant, associated function, or constant named `U24` found for enum `cpal::SampleFormat` in the current scope
+   --> generic_daw_core/src/stream.rs:145:17
+    |
+145 |         SampleFormat::U24 => U24,
+    |                       ^^^ variant, associated function, or constant not found in `cpal::SampleFormat`
+    |
+help: there is a variant with a similar name
+    |
+145 -         SampleFormat::U24 => U24,
+145 +         SampleFormat::U64 => U24,
+    |
+
+error[E0308]: mismatched types
+   --> generic_daw_core/src/stream.rs:182:19
+    |
+182 |         .map_or_else(|| default_config.sample_rate(), NonZero::get)
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `u32`, found `SampleRate`
+
+error[E0308]: arguments to this method are incorrect
+   --> generic_daw_core/src/stream.rs:183:4
+    |
+183 |         .clamp(config.min_sample_rate(), config.max_sample_rate());
+    |          ^^^^^ ------------------------  ------------------------ expected `u32`, found `SampleRate`
+    |                |
+    |                expected `u32`, found `SampleRate`
+    |
+help: the return type of this call is `SampleRate` due to the type of the argument passed
+   --> generic_daw_core/src/stream.rs:181:20
+    |
+181 |       let sample_rate = sample_rate
+    |  _______________________^
+182 | |         .map_or_else(|| default_config.sample_rate(), NonZero::get)
+183 | |         .clamp(config.min_sample_rate(), config.max_sample_rate());
+    | |________________------------------------__________________________^
+    |                  |
+    |                  this argument influences the return type of `clamp`
+help: the return type of this call is `SampleRate` due to the type of the argument passed
+   --> generic_daw_core/src/stream.rs:181:20
+    |
+181 |       let sample_rate = sample_rate
+    |  _______________________^
+182 | |         .map_or_else(|| default_config.sample_rate(), NonZero::get)
+183 | |         .clamp(config.min_sample_rate(), config.max_sample_rate());
+    | |__________________________________________------------------------^
+    |                                            |
+    |                                            this argument influences the return type of `clamp`
+note: method defined here
+   --> /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/cmp.rs:1099:7
+
+error[E0308]: mismatched types
+   --> generic_daw_core/src/stream.rs:185:26
+    |
+185 |     config.with_sample_rate(sample_rate)
+    |            ---------------- ^^^^^^^^^^^ expected `SampleRate`, found `u32`
+    |            |
+    |            arguments to this method are incorrect
+    |
+note: method defined here
+   --> /home/alex/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/cpal-0.15.3/src/lib.rs:639:12
+    |
+639 |     pub fn with_sample_rate(self, sample_rate: SampleRate) -> SupportedStreamConfig {
+    |            ^^^^^^^^^^^^^^^^
+help: try wrapping the expression in `cpal::SampleRate`
+    |
+185 |     config.with_sample_rate(cpal::SampleRate(sample_rate))
+    |                             +++++++++++++++++           +
+
+error[E0308]: arguments to this method are incorrect
+   --> generic_daw_core/src/stream.rs:195:4
+    |
+195 |         .clamp(l.min_sample_rate(), l.max_sample_rate())
+    |          ^^^^^ -------------------  ------------------- expected `u32`, found `SampleRate`
+    |                |
+    |                expected `u32`, found `SampleRate`
+    |
+help: the return type of this call is `SampleRate` due to the type of the argument passed
+   --> generic_daw_core/src/stream.rs:194:14
+    |
+194 |       let ldiff = sample_rate
+    |  _________________^
+195 | |         .clamp(l.min_sample_rate(), l.max_sample_rate())
+    | |________________-------------------_____________________^
+    |                  |
+    |                  this argument influences the return type of `clamp`
+help: the return type of this call is `SampleRate` due to the type of the argument passed
+   --> generic_daw_core/src/stream.rs:194:14
+    |
+194 |       let ldiff = sample_rate
+    |  _________________^
+195 | |         .clamp(l.min_sample_rate(), l.max_sample_rate())
+    | |_____________________________________-------------------^
+    |                                       |
+    |                                       this argument influences the return type of `clamp`
+note: method defined here
+   --> /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/cmp.rs:1099:7
+
+error[E0308]: arguments to this method are incorrect
+   --> generic_daw_core/src/stream.rs:198:4
+    |
+198 |         .clamp(r.min_sample_rate(), r.max_sample_rate())
+    |          ^^^^^ -------------------  ------------------- expected `u32`, found `SampleRate`
+    |                |
+    |                expected `u32`, found `SampleRate`
+    |
+help: the return type of this call is `SampleRate` due to the type of the argument passed
+   --> generic_daw_core/src/stream.rs:197:14
+    |
+197 |       let rdiff = sample_rate
+    |  _________________^
+198 | |         .clamp(r.min_sample_rate(), r.max_sample_rate())
+    | |________________-------------------_____________________^
+    |                  |
+    |                  this argument influences the return type of `clamp`
+help: the return type of this call is `SampleRate` due to the type of the argument passed
+   --> generic_daw_core/src/stream.rs:197:14
+    |
+197 |       let rdiff = sample_rate
+    |  _________________^
+198 | |         .clamp(r.min_sample_rate(), r.max_sample_rate())
+    | |_____________________________________-------------------^
+    |                                       |
+    |                                       this argument influences the return type of `clamp`
+note: method defined here
+   --> /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/cmp.rs:1099:7
+
+error[E0599]: no method named `is_dsd` found for enum `cpal::SampleFormat` in the current scope
+   --> generic_daw_core/src/stream.rs:255:27
+    |
+255 |     match (l.sample_format().is_dsd(), r.sample_format().is_dsd()) {
+    |                              ^^^^^^ method not found in `cpal::SampleFormat`
+
+error[E0599]: no method named `is_dsd` found for enum `cpal::SampleFormat` in the current scope
+   --> generic_daw_core/src/stream.rs:255:55
+    |
+255 |     match (l.sample_format().is_dsd(), r.sample_format().is_dsd()) {
+    |                                                          ^^^^^^ method not found in `cpal::SampleFormat`
+
+error[E0599]: no method named `bits_per_sample` found for enum `cpal::SampleFormat` in the current scope
+   --> generic_daw_core/src/stream.rs:264:6
+    |
+262 |               _ => l
+    |  __________________-
+263 | |                 .sample_format()
+264 | |                 .bits_per_sample()
+    | |_________________-^^^^^^^^^^^^^^^
+    |
+help: there is a method `into_sample` with a similar name
+    |
+264 -                 .bits_per_sample()
+264 +                 .into_sample()
+    |
+
+error[E0599]: no method named `bits_per_sample` found for enum `cpal::SampleFormat` in the current scope
+   --> generic_daw_core/src/stream.rs:265:29
+    |
+265 |                 .cmp(&r.sample_format().bits_per_sample()),
+    |                                         ^^^^^^^^^^^^^^^
+    |
+help: there is a method `into_sample` with a similar name
+    |
+265 -                 .cmp(&r.sample_format().bits_per_sample()),
+265 +                 .cmp(&r.sample_format().into_sample()),
+    |
+
+Some errors have detailed explanations: E0277, E0308, E0432, E0599.
+For more information about an error, try `rustc --explain E0277`.
+error: could not compile `generic_daw_core` (lib) due to 31 previous errors

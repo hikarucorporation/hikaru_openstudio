@@ -1,0 +1,111 @@
+warning: extern crate `font_subset` is unused in crate `build_script_build`
+  |
+  = help: remove the dependency or add `use font_subset as _;` to the crate root
+  = note: requested on the command line with `-W unused-crate-dependencies`
+
+warning: `generic_daw` (build script) generated 1 warning
+warning: extern crate `vst3` is unused in crate `vst3_host`
+ --> vst_host/src/lib.rs:4:1
+  |
+4 | pub mod module;
+  | ^
+  |
+  = help: remove the dependency or add `use vst3 as _;` to the crate root
+  = note: requested on the command line with `-W unused-crate-dependencies`
+
+warning: unused import: `IComponent`
+  --> vst_host/src/shared.rs:19:38
+   |
+19 | use vst3_sys::vst::{IAudioProcessor, IComponent, IEditController};
+   |                                      ^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `class_id_hex` is never used
+  --> vst_host/src/plugin_descriptor.rs:14:16
+   |
+13 | impl PluginDescriptor {
+   | --------------------- method in this implementation
+14 |     pub(crate) fn class_id_hex(&self) -> String {
+   |                   ^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `shared` is never read
+  --> vst_host/src/audio_thread.rs:12:5
+   |
+11 | pub struct AudioThread {
+   |            ----------- field in this struct
+12 |     shared: Arc<Shared>,
+   |     ^^^^^^
+
+warning: type could implement `Copy`; consider adding `impl Copy`
+  --> vst_host/src/lib.rs:78:1
+   |
+78 | / pub enum MainThreadMessage {
+79 | |     // Podés expandir esto más adelante según tus necesidades de comunicación
+80 | |     ParamChanged { index: u32, value: f32 },
+81 | |     RestartProcessor,
+82 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-copy-implementations`
+
+warning: type does not implement `std::fmt::Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> vst_host/src/host_application.rs:31:1
+   |
+31 | / pub struct HostApplication {
+32 | |     vtable: *const IHostApplicationVtbl,
+33 | |     shared: Arc<Shared>,
+34 | |     ref_count: std::sync::atomic::AtomicU32,
+35 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `vst3_host` (lib) generated 6 warnings (run `cargo fix --lib -p vst3_host` to apply 1 suggestion)
+   Compiling generic_daw v0.0.0 (/home/alex/Documentos/Codigo_Fuente/HIKARU_OPENSTUDIO/generic-daw/generic_daw_gui)
+warning: extern crate `vst3_host` is unused in crate `generic_daw`
+  |
+  = help: remove the dependency or add `use vst3_host as _;` to the crate root
+  = note: requested on the command line with `-W unused-crate-dependencies`
+
+warning: unnecessary qualification
+  --> generic_daw_gui/src/arrangement_view/arrangement.rs:75:11
+   |
+75 | impl From<generic_daw_core::Stream> for SafeSend<NoDebug<generic_daw_core::Stream>> {
+   |           ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+   |
+75 - impl From<generic_daw_core::Stream> for SafeSend<NoDebug<generic_daw_core::Stream>> {
+75 + impl From<Stream> for SafeSend<NoDebug<generic_daw_core::Stream>> {
+   |
+
+warning: unnecessary qualification
+  --> generic_daw_gui/src/arrangement_view/arrangement.rs:75:58
+   |
+75 | impl From<generic_daw_core::Stream> for SafeSend<NoDebug<generic_daw_core::Stream>> {
+   |                                                          ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: remove the unnecessary path segments
+   |
+75 - impl From<generic_daw_core::Stream> for SafeSend<NoDebug<generic_daw_core::Stream>> {
+75 + impl From<generic_daw_core::Stream> for SafeSend<NoDebug<Stream>> {
+   |
+
+warning: unnecessary qualification
+  --> generic_daw_gui/src/arrangement_view/arrangement.rs:76:17
+   |
+76 |     fn from(value: generic_daw_core::Stream) -> Self {
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: remove the unnecessary path segments
+   |
+76 -     fn from(value: generic_daw_core::Stream) -> Self {
+76 +     fn from(value: Stream) -> Self {
+   |
+
+warning: `generic_daw` (bin "generic_daw") generated 4 warnings (run `cargo fix --bin "generic_daw" -p generic_daw` to apply 3 suggestions)
+    Finished `dev` profile [optimized + debuginfo] target(s) in 1m 45s

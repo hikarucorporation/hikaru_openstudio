@@ -1,0 +1,119 @@
+    Updating crates.io index
+     Locking 32 packages to latest Rust 1.97.0 compatible versions
+    Updating alsa v0.9.1 -> v0.11.0
+    Updating alsa-sys v0.3.1 -> v0.4.0
+    Updating coreaudio-rs v0.11.3 -> v0.14.2
+    Updating cpal v0.15.3 -> v0.18.1
+    Updating mach2 v0.4.3 -> v0.6.0
+      Adding num-complex v0.4.6
+      Adding num-integer v0.1.46
+      Adding objc2-audio-toolbox v0.3.2
+      Adding objc2-avf-audio v0.3.2
+      Adding objc2-core-audio v0.3.2
+      Adding objc2-core-audio-types v0.3.2
+      Adding primal-check v0.3.4
+      Adding regex-lite v0.1.9
+      Adding rustfft v6.4.1
+      Adding strength_reduce v0.2.4
+    Updating symphonia v0.5.5 -> v0.6.0
+    Updating symphonia-bundle-flac v0.5.5 -> v0.6.0
+      Adding symphonia-bundle-mp3 v0.6.0
+      Adding symphonia-codec-aac v0.6.0
+    Updating symphonia-codec-adpcm v0.5.5 -> v0.6.0
+      Adding symphonia-codec-alac v0.6.0
+    Updating symphonia-codec-pcm v0.5.5 -> v0.6.0
+    Updating symphonia-codec-vorbis v0.5.5 -> v0.6.0
+      Adding symphonia-common v0.6.0
+    Updating symphonia-core v0.5.5 -> v0.6.0
+      Adding symphonia-format-caf v0.6.0
+      Adding symphonia-format-isomp4 v0.6.0
+    Updating symphonia-format-mkv v0.5.5 -> v0.6.0
+    Updating symphonia-format-ogg v0.5.5 -> v0.6.0
+    Updating symphonia-format-riff v0.5.5 -> v0.6.0
+    Updating symphonia-metadata v0.5.5 -> v0.6.0
+      Adding transpose v0.2.3
+   Compiling num-traits v0.2.19
+   Compiling arrayvec v0.7.8
+   Compiling strength_reduce v0.2.4
+   Compiling regex-lite v0.1.9
+   Compiling alsa-sys v0.4.0
+   Compiling cpal v0.18.1
+warning: extern crate `font_subset` is unused in crate `build_script_build`
+  |
+  = help: remove the dependency or add `use font_subset as _;` to the crate root
+  = note: requested on the command line with `-W unused-crate-dependencies`
+
+warning: `generic_daw` (build script) generated 1 warning
+   Compiling midly v0.5.3
+   Compiling alsa v0.11.0
+   Compiling num-integer v0.1.46
+   Compiling primal-check v0.3.4
+   Compiling transpose v0.2.3
+   Compiling num-complex v0.4.6
+   Compiling euclid v0.22.14
+   Compiling rustfft v6.4.1
+   Compiling half v2.7.1
+   Compiling iced_core v0.15.0-dev (https://github.com/edwloef/iced.git?branch=generic-daw#8471d927)
+   Compiling lyon_geom v1.0.19
+   Compiling lyon_path v1.0.19
+   Compiling naga v29.0.4
+   Compiling iced_futures v0.15.0-dev (https://github.com/edwloef/iced.git?branch=generic-daw#8471d927)
+   Compiling ordered-float v5.3.0
+   Compiling iced_graphics v0.15.0-dev (https://github.com/edwloef/iced.git?branch=generic-daw#8471d927)
+   Compiling symphonia-core v0.6.0
+   Compiling iced_debug v0.15.0-dev (https://github.com/edwloef/iced.git?branch=generic-daw#8471d927)
+   Compiling iced_selector v0.15.0-dev (https://github.com/edwloef/iced.git?branch=generic-daw#8471d927)
+   Compiling lyon_tessellation v1.0.20
+   Compiling symphonia-metadata v0.6.0
+   Compiling symphonia-common v0.6.0
+   Compiling lyon_algorithms v1.0.20
+   Compiling etagere v0.2.15
+   Compiling wgpu-naga-bridge v29.0.4
+   Compiling wgpu-hal v29.0.4
+   Compiling lyon v1.0.19
+   Compiling iced_runtime v0.15.0-dev (https://github.com/edwloef/iced.git?branch=generic-daw#8471d927)
+   Compiling wgpu-core-deps-windows-linux-android v29.0.4
+   Compiling wgpu-core v29.0.4
+   Compiling wgpu v29.0.4
+   Compiling cryoglyph v0.1.0 (https://github.com/iced-rs/cryoglyph.git?rev=53ba3e879539d19ed8162942126a977ec896cc3b#53ba3e87)
+   Compiling iced_wgpu v0.15.0-dev (https://github.com/edwloef/iced.git?branch=generic-daw#8471d927)
+   Compiling iced_renderer v0.15.0-dev (https://github.com/edwloef/iced.git?branch=generic-daw#8471d927)
+   Compiling iced_widget v0.15.0-dev (https://github.com/edwloef/iced.git?branch=generic-daw#8471d927)
+   Compiling iced_program v0.15.0-dev (https://github.com/edwloef/iced.git?branch=generic-daw#8471d927)
+   Compiling symphonia-format-isomp4 v0.6.0
+   Compiling symphonia-bundle-flac v0.6.0
+   Compiling symphonia-format-mkv v0.6.0
+   Compiling symphonia-codec-alac v0.6.0
+   Compiling symphonia-codec-aac v0.6.0
+   Compiling symphonia-format-ogg v0.6.0
+   Compiling symphonia-codec-vorbis v0.6.0
+   Compiling symphonia-format-caf v0.6.0
+   Compiling symphonia-format-riff v0.6.0
+   Compiling symphonia-codec-pcm v0.6.0
+   Compiling symphonia-bundle-mp3 v0.6.0
+   Compiling symphonia-codec-adpcm v0.6.0
+   Compiling symphonia v0.6.0
+   Compiling iced_winit v0.15.0-dev (https://github.com/edwloef/iced.git?branch=generic-daw#8471d927)
+   Compiling iced v0.15.0-dev (https://github.com/edwloef/iced.git?branch=generic-daw#8471d927)
+   Compiling sweeten v0.15.0-dev (https://github.com/edwloef/sweeten.git?branch=generic-daw#e1936593)
+   Compiling generic_daw_core v0.0.0 (/home/alex/Documentos/Codigo_Fuente/HIKARU_OPENSTUDIO/generic-daw/generic_daw_core)
+error[E0599]: no variant, associated function, or constant named `PluginAdd` found for enum `NodeAction` in the current scope
+   --> generic_daw_core/src/channel.rs:161:16
+    |
+161 |             NodeAction::PluginAdd(id) => self.plugins.push(Plugin::new(id)),
+    |                         ^^^^^^^^^ variant, associated function, or constant not found in `NodeAction`
+    |
+   ::: generic_daw_core/src/audio_thread.rs:65:1
+    |
+ 65 | pub enum NodeAction {
+    | ------------------- variant, associated function, or constant `PluginAdd` not found for this enum
+
+error[E0599]: no variant, associated function, or constant named `Balance` found for enum `PanMode` in the current scope
+   --> generic_daw_core/src/channel.rs:217:19
+    |
+217 |                 pan: PanMode::Balance(0.0),
+    |                               ^^^^^^^ variant, associated function, or constant not found in `PanMode`
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `generic_daw_core` (lib) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...

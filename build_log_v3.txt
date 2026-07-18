@@ -1,0 +1,633 @@
+warning: extern crate `font_subset` is unused in crate `build_script_build`
+  |
+  = help: remove the dependency or add `use font_subset as _;` to the crate root
+  = note: requested on the command line with `-W unused-crate-dependencies`
+
+warning: `generic_daw` (build script) generated 1 warning
+   Compiling generic_daw_core v0.0.0 (/home/alex/Documentos/Codigo_Fuente/HIKARU_OPENSTUDIO/generic-daw/generic_daw_core)
+warning: extern crate `vst3` is unused in crate `vst3_host`
+ --> vst_host/src/lib.rs:4:1
+  |
+4 | pub mod module;
+  | ^
+  |
+  = help: remove the dependency or add `use vst3 as _;` to the crate root
+  = note: requested on the command line with `-W unused-crate-dependencies`
+
+warning: unused import: `IComponent`
+  --> vst_host/src/shared.rs:19:38
+   |
+19 | use vst3_sys::vst::{IAudioProcessor, IComponent, IEditController};
+   |                                      ^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `class_id_hex` is never used
+  --> vst_host/src/plugin_descriptor.rs:14:16
+   |
+13 | impl PluginDescriptor {
+   | --------------------- method in this implementation
+14 |     pub(crate) fn class_id_hex(&self) -> String {
+   |                   ^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `shared` is never read
+  --> vst_host/src/audio_thread.rs:12:5
+   |
+11 | pub struct AudioThread {
+   |            ----------- field in this struct
+12 |     shared: Arc<Shared>,
+   |     ^^^^^^
+
+warning: type could implement `Copy`; consider adding `impl Copy`
+  --> vst_host/src/lib.rs:78:1
+   |
+78 | / pub enum MainThreadMessage {
+79 | |     // Podés expandir esto más adelante según tus necesidades de comunicación
+80 | |     ParamChanged { index: u32, value: f32 },
+81 | |     RestartProcessor,
+82 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-copy-implementations`
+
+warning: type does not implement `std::fmt::Debug`; consider adding `#[derive(Debug)]` or a manual implementation
+  --> vst_host/src/host_application.rs:31:1
+   |
+31 | / pub struct HostApplication {
+32 | |     vtable: *const IHostApplicationVtbl,
+33 | |     shared: Arc<Shared>,
+34 | |     ref_count: std::sync::atomic::AtomicU32,
+35 | | }
+   | |_^
+   |
+   = note: requested on the command line with `-W missing-debug-implementations`
+
+warning: `vst3_host` (lib) generated 6 warnings (run `cargo fix --lib -p vst3_host` to apply 1 suggestion)
+   Compiling generic_daw_widget v0.0.0 (/home/alex/Documentos/Codigo_Fuente/HIKARU_OPENSTUDIO/generic-daw/generic_daw_widget)
+   Compiling iced_split v0.2.0-dev (https://github.com/edwloef/iced_split.git?branch=generic-daw#9fde7236)
+   Compiling generic_daw v0.0.0 (/home/alex/Documentos/Codigo_Fuente/HIKARU_OPENSTUDIO/generic-daw/generic_daw_gui)
+error[E0428]: the name `Arrangement` is defined multiple times
+  --> generic_daw_gui/src/arrangement_view/arrangement.rs:83:1
+   |
+64 | pub struct Arrangement {
+   | ---------------------- previous definition of the type `Arrangement` here
+...
+83 | pub struct Arrangement {
+   | ^^^^^^^^^^^^^^^^^^^^^^ `Arrangement` redefined here
+   |
+   = note: `Arrangement` must be defined only once in the type namespace of this module
+
+error[E0432]: unresolved import `generic_daw`
+ --> generic_daw_gui/src/config_view.rs:4:5
+  |
+4 | use generic_daw::Config; // Ajustá este import según la estructura real de tus crates
+  |     ^^^^^^^^^^^ use of unresolved module or unlinked crate `generic_daw`
+  |
+  = help: if you wanted to use a crate named `generic_daw`, use `cargo add generic_daw` to add it to your `Cargo.toml`
+
+warning: extern crate `vst3_host` is unused in crate `generic_daw`
+  |
+  = help: remove the dependency or add `use vst3_host as _;` to the crate root
+  = note: requested on the command line with `-W unused-crate-dependencies`
+
+warning: unused import: `arrangement_view::crc`
+ --> generic_daw_gui/src/arrangement_view/sample.rs:1:13
+  |
+1 | use crate::{arrangement_view::crc, lod::Lods};
+  |             ^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `fs::File`
+ --> generic_daw_gui/src/arrangement_view/sample.rs:3:11
+  |
+3 | use std::{fs::File, num::NonZero, path::Path, sync::Arc};
+  |           ^^^^^^^^
+
+warning: unnecessary qualification
+  --> generic_daw_gui/src/arrangement_view/sample.rs:61:17
+   |
+61 |             sample_rate: std::num::NonZero::new(core.sample_rate)
+   |                          ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: requested on the command line with `-W unused-qualifications`
+help: remove the unnecessary path segments
+   |
+61 -             sample_rate: std::num::NonZero::new(core.sample_rate)
+61 +             sample_rate: NonZero::new(core.sample_rate)
+   |
+
+warning: unnecessary qualification
+  --> generic_daw_gui/src/arrangement_view/sample.rs:62:24
+   |
+62 |                 .unwrap_or_else(|| std::num::NonZero::new(44100).unwrap()),
+   |                                    ^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: remove the unnecessary path segments
+   |
+62 -                 .unwrap_or_else(|| std::num::NonZero::new(44100).unwrap()),
+62 +                 .unwrap_or_else(|| NonZero::new(44100).unwrap()),
+   |
+
+warning: unused import: `text_input`
+ --> generic_daw_gui/src/config_view.rs:1:80
+  |
+1 | use iced::widget::{button, checkbox, column, container, row, scrollable, text, text_input};
+  |                                                                                ^^^^^^^^^^
+
+warning: unused import: `Theme`
+ --> generic_daw_gui/src/config_view.rs:2:46
+  |
+2 | use iced::{Alignment, Element, Length, Task, Theme};
+  |                                              ^^^^^
+
+warning: hidden lifetime parameters in types are deprecated
+   --> generic_daw_gui/src/config_view.rs:176:34
+    |
+176 |     pub fn view(&self) -> Element<Message> {
+    |                           -------^-------- expected lifetime parameter
+    |
+    = note: `-W elided-lifetimes-in-paths` implied by `-W rust-2018-idioms`
+    = help: to override `-W rust-2018-idioms` add `#[allow(elided_lifetimes_in_paths)]`
+help: indicate the anonymous lifetime
+    |
+176 |     pub fn view(&self) -> Element<'_, Message> {
+    |                                   +++
+
+warning: unnecessary qualification
+   --> generic_daw_gui/src/config_view.rs:265:23
+    |
+265 |             .center_x(iced::Length::Fill)
+    |                       ^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+265 -             .center_x(iced::Length::Fill)
+265 +             .center_x(Length::Fill)
+    |
+
+warning: unnecessary qualification
+   --> generic_daw_gui/src/config_view.rs:266:23
+    |
+266 |             .center_y(iced::Length::Fill)
+    |                       ^^^^^^^^^^^^^^^^^^
+    |
+help: remove the unnecessary path segments
+    |
+266 -             .center_y(iced::Length::Fill)
+266 +             .center_y(Length::Fill)
+    |
+
+error[E0124]: field `stream` is already declared
+  --> generic_daw_gui/src/arrangement_view/arrangement.rs:99:2
+   |
+97 |     stream: Option<NoDebug<Stream>>,
+   |     ------------------------------- `stream` first declared here
+98 |
+99 |     stream: Option<NoDebug<Stream>>, 
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ field already declared
+
+error[E0119]: conflicting implementations of trait `std::fmt::Debug` for type `arrangement::Arrangement`
+  --> generic_daw_gui/src/arrangement_view/arrangement.rs:82:10
+   |
+63 | #[derive(Debug)]
+   |          ----- first implementation here
+...
+82 | #[derive(Debug)]
+   |          ^^^^^ conflicting implementation for `arrangement::Arrangement`
+
+error[E0277]: `SafeSend<NoDebug<generic_daw_core::Stream>>` doesn't implement `std::fmt::Debug`
+  --> generic_daw_gui/src/arrangement_view/arrangement.rs:78:2
+   |
+63 | #[derive(Debug)]
+   |          ----- in this derive macro expansion
+...
+78 |     stream: Option<SafeSend<NoDebug<Stream>>>,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::fmt::Debug` is not implemented for `SafeSend<NoDebug<generic_daw_core::Stream>>`
+   |
+   = note: add `#[derive(Debug)]` to `SafeSend<NoDebug<generic_daw_core::Stream>>` or manually `impl std::fmt::Debug for SafeSend<NoDebug<generic_daw_core::Stream>>`
+help: the trait `std::fmt::Debug` is implemented for `std::option::Option<T>`
+  --> /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/option.rs:591:15
+help: consider annotating `SafeSend<NoDebug<generic_daw_core::Stream>>` with `#[derive(Debug)]`
+   |
+45 + #[derive(Debug)]
+46 | pub struct SafeSend<T>(pub T);
+   |
+
+error[E0277]: `SafeSend<NoDebug<generic_daw_core::Stream>>` doesn't implement `std::fmt::Debug`
+  --> generic_daw_gui/src/arrangement_view/arrangement.rs:97:2
+   |
+82 | #[derive(Debug)]
+   |          ----- in this derive macro expansion
+...
+97 |     stream: Option<NoDebug<Stream>>,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the trait `std::fmt::Debug` is not implemented for `SafeSend<NoDebug<generic_daw_core::Stream>>`
+   |
+   = note: add `#[derive(Debug)]` to `SafeSend<NoDebug<generic_daw_core::Stream>>` or manually `impl std::fmt::Debug for SafeSend<NoDebug<generic_daw_core::Stream>>`
+help: the trait `std::fmt::Debug` is implemented for `std::option::Option<T>`
+  --> /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/option.rs:591:15
+help: consider annotating `SafeSend<NoDebug<generic_daw_core::Stream>>` with `#[derive(Debug)]`
+   |
+45 + #[derive(Debug)]
+46 | pub struct SafeSend<T>(pub T);
+   |
+
+error[E0277]: the trait bound `SafeSend<NoDebug<generic_daw_core::Stream>>: From<generic_daw_core::Stream>` is not satisfied
+   --> generic_daw_gui/src/arrangement_view/arrangement.rs:143:29
+    |
+143 |         self.stream = Some(stream.into());
+    |                                   ^^^^ unsatisfied trait bound
+    |
+help: the trait `From<generic_daw_core::Stream>` is not implemented for `SafeSend<NoDebug<generic_daw_core::Stream>>`
+   --> generic_daw_gui/src/arrangement_view/arrangement.rs:45:1
+    |
+ 45 | pub struct SafeSend<T>(pub T);
+    | ^^^^^^^^^^^^^^^^^^^^^^
+    = note: required for `generic_daw_core::Stream` to implement `Into<SafeSend<NoDebug<generic_daw_core::Stream>>>`
+
+error[E0277]: the trait bound `SafeSend<NoDebug<generic_daw_core::Stream>>: From<generic_daw_core::Stream>` is not satisfied
+   --> generic_daw_gui/src/arrangement_view/arrangement.rs:161:29
+    |
+161 |         self.stream = Some(stream.into());
+    |                                   ^^^^ unsatisfied trait bound
+    |
+help: the trait `From<generic_daw_core::Stream>` is not implemented for `SafeSend<NoDebug<generic_daw_core::Stream>>`
+   --> generic_daw_gui/src/arrangement_view/arrangement.rs:45:1
+    |
+ 45 | pub struct SafeSend<T>(pub T);
+    | ^^^^^^^^^^^^^^^^^^^^^^
+    = note: required for `generic_daw_core::Stream` to implement `Into<SafeSend<NoDebug<generic_daw_core::Stream>>>`
+
+error[E0599]: no associated function or constant named `from_core` found for struct `SamplePair` in the current scope
+    --> generic_daw_gui/src/arrangement_view/arrangement.rs:1127:20
+     |
+1127 | ...                   SamplePair::from_core(
+     |                                   ^^^^^^^^^ associated function or constant not found in `SamplePair`
+     |
+    ::: generic_daw_gui/src/arrangement_view/sample.rs:31:1
+     |
+  31 | pub struct SamplePair {
+     | --------------------- associated function or constant `from_core` not found for this struct
+     |
+note: if you're trying to build a new `SamplePair` consider using one of the following associated functions:
+      SamplePair::from_core_with_crc_and_len
+      SamplePair::from_core_and_lods_with_crc_and_len
+    --> generic_daw_gui/src/arrangement_view/sample.rs:37:2
+     |
+  37 | /     pub fn from_core_with_crc_and_len(
+  38 | |         core: generic_daw_core::Sample,
+  39 | |         crc: u32,
+  40 | |         len: u64,
+  41 | |         path: Arc<Path>,
+  42 | |     ) -> Option<Self> {
+     | |_____________________^
+...
+  47 | /     pub fn from_core_and_lods_with_crc_and_len(
+  48 | |         core: generic_daw_core::Sample,
+  49 | |         lods: Lods,
+  50 | |         crc: u32,
+  51 | |         len: u64,
+  52 | |         path: Arc<Path>,
+  53 | |     ) -> Option<Self> {
+     | |_____________________^
+
+error[E0560]: struct `generic_daw_core::Sample` has no field named `data`
+    --> generic_daw_gui/src/arrangement_view/arrangement.rs:1130:10
+     |
+1130 | ...                   data: NoDebug(samples.into()),
+     |                       ^^^^ `generic_daw_core::Sample` does not have this field
+     |
+     = note: all struct fields are already assigned
+
+error[E0599]: no associated function or constant named `with_crc_and_len` found for struct `SamplePair` in the current scope
+   --> generic_daw_gui/src/arrangement_view/project.rs:337:40
+    |
+337 |                     && let Some(sample) = SamplePair::with_crc_and_len(sample.crc, sample.len, path)
+    |                                                       ^^^^^^^^^^^^^^^^ associated function or constant not found in `SamplePair`
+    |
+   ::: generic_daw_gui/src/arrangement_view/sample.rs:31:1
+    |
+ 31 | pub struct SamplePair {
+    | --------------------- associated function or constant `with_crc_and_len` not found for this struct
+    |
+note: if you're trying to build a new `SamplePair` consider using one of the following associated functions:
+      SamplePair::from_core_with_crc_and_len
+      SamplePair::from_core_and_lods_with_crc_and_len
+   --> generic_daw_gui/src/arrangement_view/sample.rs:37:2
+    |
+ 37 | /     pub fn from_core_with_crc_and_len(
+ 38 | |         core: generic_daw_core::Sample,
+ 39 | |         crc: u32,
+ 40 | |         len: u64,
+ 41 | |         path: Arc<Path>,
+ 42 | |     ) -> Option<Self> {
+    | |_____________________^
+...
+ 47 | /     pub fn from_core_and_lods_with_crc_and_len(
+ 48 | |         core: generic_daw_core::Sample,
+ 49 | |         lods: Lods,
+ 50 | |         crc: u32,
+ 51 | |         len: u64,
+ 52 | |         path: Arc<Path>,
+ 53 | |     ) -> Option<Self> {
+    | |_____________________^
+help: there is an associated function `from_core_with_crc_and_len` with a similar name
+   --> generic_daw_gui/src/arrangement_view/sample.rs:37:2
+    |
+ 37 | /     pub fn from_core_with_crc_and_len(
+ 38 | |         core: generic_daw_core::Sample,
+ 39 | |         crc: u32,
+ 40 | |         len: u64,
+ 41 | |         path: Arc<Path>,
+ 42 | |     ) -> Option<Self> {
+    | |_____________________^
+
+error[E0599]: no associated function or constant named `new` found for struct `SamplePair` in the current scope
+   --> generic_daw_gui/src/arrangement_view/project.rs:367:40
+    |
+367 |                     if let Some(sample) = SamplePair::new(path) {
+    |                                                       ^^^ associated function or constant not found in `SamplePair`
+    |
+   ::: generic_daw_gui/src/arrangement_view/sample.rs:31:1
+    |
+ 31 | pub struct SamplePair {
+    | --------------------- associated function or constant `new` not found for this struct
+    |
+note: if you're trying to build a new `SamplePair` consider using one of the following associated functions:
+      SamplePair::from_core_with_crc_and_len
+      SamplePair::from_core_and_lods_with_crc_and_len
+   --> generic_daw_gui/src/arrangement_view/sample.rs:37:2
+    |
+ 37 | /     pub fn from_core_with_crc_and_len(
+ 38 | |         core: generic_daw_core::Sample,
+ 39 | |         crc: u32,
+ 40 | |         len: u64,
+ 41 | |         path: Arc<Path>,
+ 42 | |     ) -> Option<Self> {
+    | |_____________________^
+...
+ 47 | /     pub fn from_core_and_lods_with_crc_and_len(
+ 48 | |         core: generic_daw_core::Sample,
+ 49 | |         lods: Lods,
+ 50 | |         crc: u32,
+ 51 | |         len: u64,
+ 52 | |         path: Arc<Path>,
+ 53 | |     ) -> Option<Self> {
+    | |_____________________^
+    = help: items from traits can only be used if the trait is implemented and in scope
+    = note: the following traits define an item `new`, perhaps you need to implement one of them:
+            candidate #1: `Compositor`
+            candidate #2: `Highlighter`
+            candidate #3: `TupleDelta`
+            candidate #4: `iced::Executor`
+            candidate #5: `iced::advanced::renderer::Headless`
+            candidate #6: `iced::widget::shader::Pipeline`
+            candidate #7: `parking_lot_core::thread_parker::ThreadParkerT`
+            candidate #8: `wgpu::dispatch::InstanceInterface`
+
+error[E0599]: no associated function or constant named `from_core_and_lods` found for struct `SamplePair` in the current scope
+  --> generic_daw_gui/src/arrangement_view/recording.rs:71:15
+   |
+71 |         SamplePair::from_core_and_lods(core, lods.finalize(), path).unwrap()
+   |                     ^^^^^^^^^^^^^^^^^^ associated function or constant not found in `SamplePair`
+   |
+  ::: generic_daw_gui/src/arrangement_view/sample.rs:31:1
+   |
+31 | pub struct SamplePair {
+   | --------------------- associated function or constant `from_core_and_lods` not found for this struct
+   |
+note: if you're trying to build a new `SamplePair` consider using one of the following associated functions:
+      SamplePair::from_core_with_crc_and_len
+      SamplePair::from_core_and_lods_with_crc_and_len
+  --> generic_daw_gui/src/arrangement_view/sample.rs:37:2
+   |
+37 | /     pub fn from_core_with_crc_and_len(
+38 | |         core: generic_daw_core::Sample,
+39 | |         crc: u32,
+40 | |         len: u64,
+41 | |         path: Arc<Path>,
+42 | |     ) -> Option<Self> {
+   | |_____________________^
+...
+47 | /     pub fn from_core_and_lods_with_crc_and_len(
+48 | |         core: generic_daw_core::Sample,
+49 | |         lods: Lods,
+50 | |         crc: u32,
+51 | |         len: u64,
+52 | |         path: Arc<Path>,
+53 | |     ) -> Option<Self> {
+   | |_____________________^
+help: there is an associated function `from_core_and_lods_with_crc_and_len` with a similar name
+  --> generic_daw_gui/src/arrangement_view/sample.rs:47:2
+   |
+47 | /     pub fn from_core_and_lods_with_crc_and_len(
+48 | |         core: generic_daw_core::Sample,
+49 | |         lods: Lods,
+50 | |         crc: u32,
+51 | |         len: u64,
+52 | |         path: Arc<Path>,
+53 | |     ) -> Option<Self> {
+   | |_____________________^
+
+error[E0599]: no associated function or constant named `from_core_and_lods` found for struct `SamplePair` in the current scope
+  --> generic_daw_gui/src/arrangement_view/recording.rs:79:15
+   |
+79 |         SamplePair::from_core_and_lods(self.core.finalize(), self.lods.finalize(), self.path)
+   |                     ^^^^^^^^^^^^^^^^^^ associated function or constant not found in `SamplePair`
+   |
+  ::: generic_daw_gui/src/arrangement_view/sample.rs:31:1
+   |
+31 | pub struct SamplePair {
+   | --------------------- associated function or constant `from_core_and_lods` not found for this struct
+   |
+note: if you're trying to build a new `SamplePair` consider using one of the following associated functions:
+      SamplePair::from_core_with_crc_and_len
+      SamplePair::from_core_and_lods_with_crc_and_len
+  --> generic_daw_gui/src/arrangement_view/sample.rs:37:2
+   |
+37 | /     pub fn from_core_with_crc_and_len(
+38 | |         core: generic_daw_core::Sample,
+39 | |         crc: u32,
+40 | |         len: u64,
+41 | |         path: Arc<Path>,
+42 | |     ) -> Option<Self> {
+   | |_____________________^
+...
+47 | /     pub fn from_core_and_lods_with_crc_and_len(
+48 | |         core: generic_daw_core::Sample,
+49 | |         lods: Lods,
+50 | |         crc: u32,
+51 | |         len: u64,
+52 | |         path: Arc<Path>,
+53 | |     ) -> Option<Self> {
+   | |_____________________^
+help: there is an associated function `from_core_and_lods_with_crc_and_len` with a similar name
+  --> generic_daw_gui/src/arrangement_view/sample.rs:47:2
+   |
+47 | /     pub fn from_core_and_lods_with_crc_and_len(
+48 | |         core: generic_daw_core::Sample,
+49 | |         lods: Lods,
+50 | |         crc: u32,
+51 | |         len: u64,
+52 | |         path: Arc<Path>,
+53 | |     ) -> Option<Self> {
+   | |_____________________^
+
+error[E0609]: no field `data` on type `generic_daw_core::Sample`
+  --> generic_daw_gui/src/arrangement_view/sample.rs:43:30
+   |
+43 |         let lods = Lods::new(&core.data); 
+   |                                    ^^^^ unknown field
+   |
+   = note: available fields are: `id`, `samples`, `sample_rate`
+
+error[E0609]: no field `data` on type `generic_daw_core::Sample`
+  --> generic_daw_gui/src/arrangement_view/sample.rs:60:18
+   |
+60 |             samples: core.data.clone(),
+   |                           ^^^^ unknown field
+   |
+   = note: available fields are: `id`, `samples`, `sample_rate`
+
+error[E0277]: the trait bound `std::num::NonZero<u32>: ZeroablePrimitive` is not satisfied
+  --> generic_daw_gui/src/arrangement_view/sample.rs:61:40
+   |
+61 |             sample_rate: std::num::NonZero::new(core.sample_rate)
+   |                          ---------------------- ^^^^^^^^^^^^^^^^ the nightly-only, unstable trait `ZeroablePrimitive` is not implemented for `std::num::NonZero<u32>`
+   |                          |
+   |                          required by a bound introduced by this call
+   |
+   = help: the following other types implement trait `ZeroablePrimitive`:
+             char
+             i128
+             i16
+             i32
+             i64
+             i8
+             isize
+             u128
+           and 5 others
+note: required by a bound in `std::num::NonZero::<T>::new`
+  --> /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/num/nonzero.rs:404:4
+
+error[E0599]: the method `unwrap_or_else` exists for enum `std::option::Option<std::num::NonZero<std::num::NonZero<u32>>>`, but its trait bounds were not satisfied
+  --> generic_daw_gui/src/arrangement_view/sample.rs:62:6
+   |
+61 |               sample_rate: std::num::NonZero::new(core.sample_rate)
+   |  __________________________-
+62 | |                 .unwrap_or_else(|| std::num::NonZero::new(44100).unwrap()),
+   | |                 -^^^^^^^^^^^^^^ method cannot be called due to unsatisfied trait bounds
+   | |_________________|
+   |
+   |
+   = note: the following trait bounds were not satisfied:
+           `std::num::NonZero<u32>: ZeroablePrimitive`
+           which is required by `std::num::NonZero<std::num::NonZero<u32>>: Sized`
+
+error[E0277]: the trait bound `std::num::NonZero<u32>: ZeroablePrimitive` is not satisfied
+  --> generic_daw_gui/src/arrangement_view/sample.rs:61:17
+   |
+61 |             sample_rate: std::num::NonZero::new(core.sample_rate)
+   |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the nightly-only, unstable trait `ZeroablePrimitive` is not implemented for `std::num::NonZero<u32>`
+   |
+   = help: the following other types implement trait `ZeroablePrimitive`:
+             char
+             i128
+             i16
+             i32
+             i64
+             i8
+             isize
+             u128
+           and 5 others
+note: required by a bound in `std::num::NonZero`
+  --> /rustc/2d8144b7880597b6e6d3dfd63a9a9efae3f533d3/library/core/src/num/nonzero.rs:128:0
+
+error[E0599]: no associated function or constant named `new` found for struct `SamplePair` in the current scope
+    --> generic_daw_gui/src/arrangement_view.rs:1144:21
+     |
+1144 | ...                   SamplePair::new(path).map(|pair| (Box::new(pair), track, pos)),
+     |                                   ^^^ associated function or constant not found in `SamplePair`
+     |
+    ::: generic_daw_gui/src/arrangement_view/sample.rs:31:1
+     |
+  31 | pub struct SamplePair {
+     | --------------------- associated function or constant `new` not found for this struct
+     |
+note: if you're trying to build a new `SamplePair` consider using one of the following associated functions:
+      SamplePair::from_core_with_crc_and_len
+      SamplePair::from_core_and_lods_with_crc_and_len
+    --> generic_daw_gui/src/arrangement_view/sample.rs:37:2
+     |
+  37 | /     pub fn from_core_with_crc_and_len(
+  38 | |         core: generic_daw_core::Sample,
+  39 | |         crc: u32,
+  40 | |         len: u64,
+  41 | |         path: Arc<Path>,
+  42 | |     ) -> Option<Self> {
+     | |_____________________^
+...
+  47 | /     pub fn from_core_and_lods_with_crc_and_len(
+  48 | |         core: generic_daw_core::Sample,
+  49 | |         lods: Lods,
+  50 | |         crc: u32,
+  51 | |         len: u64,
+  52 | |         path: Arc<Path>,
+  53 | |     ) -> Option<Self> {
+     | |_____________________^
+     = help: items from traits can only be used if the trait is implemented and in scope
+     = note: the following traits define an item `new`, perhaps you need to implement one of them:
+             candidate #1: `Compositor`
+             candidate #2: `Highlighter`
+             candidate #3: `TupleDelta`
+             candidate #4: `iced::Executor`
+             candidate #5: `iced::advanced::renderer::Headless`
+             candidate #6: `iced::widget::shader::Pipeline`
+             candidate #7: `parking_lot_core::thread_parker::ThreadParkerT`
+             candidate #8: `wgpu::dispatch::InstanceInterface`
+
+error[E0283]: type annotations needed
+   --> generic_daw_gui/src/config_view.rs:202:22
+    |
+198 |             column(
+    |             ------ required by a bound introduced by this call
+...
+202 |                     .collect()
+    |                      ^^^^^^^ cannot infer type of the type parameter `B` declared on the method `collect`
+    |
+    = note: the type must implement `IntoIterator`
+note: required by a bound in `iced::widget::column`
+   --> /home/alex/.cargo/git/checkouts/iced-3e8cbed1b60ced94/8471d92/widget/src/helpers.rs:481:20
+    |
+480 | pub fn column<'a, Message, Theme, Renderer>(
+    |        ------ required by a bound in this function
+481 |     children: impl IntoIterator<Item = Element<'a, Message, Theme, Renderer>>,
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ required by this bound in `column`
+help: consider specifying the generic argument
+    |
+202 |                     .collect::<Vec<_>>()
+    |                             ++++++++++
+
+error[E0599]: no associated function or constant named `keybinds` found for struct `ConfigView` in the current scope
+    --> generic_daw_gui/src/daw.rs:1133:22
+     |
+1133 |                 } => ConfigView::keybinds(&key, modifiers, repeat)
+     |                                  ^^^^^^^^ associated function or constant not found in `ConfigView`
+     |
+    ::: generic_daw_gui/src/config_view.rs:23:1
+     |
+  23 | pub struct ConfigView {
+     | --------------------- associated function or constant `keybinds` not found for this struct
+     |
+note: if you're trying to build a new `ConfigView`, consider using `ConfigView::new` which returns `ConfigView`
+    --> generic_daw_gui/src/config_view.rs:33:5
+     |
+  33 |     pub fn new(config: &Config) -> Self {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Some errors have detailed explanations: E0119, E0124, E0277, E0283, E0428, E0432, E0560, E0599, E0609.
+For more information about an error, try `rustc --explain E0119`.
+warning: `generic_daw` (bin "generic_daw") generated 10 warnings
+error: could not compile `generic_daw` (bin "generic_daw") due to 22 previous errors; 10 warnings emitted
