@@ -31,11 +31,9 @@ struct IUnknownVtbl {
 
 #[repr(C)]
 struct IPluginFactoryVtbl {
-    // Hereda de IUnknown
     query_interface: unsafe extern "system" fn(this: *mut *const IPluginFactoryVtbl, iid: *const c_void, obj: *mut *mut c_void) -> i32,
     add_ref: unsafe extern "system" fn(this: *mut *const IPluginFactoryVtbl) -> u32,
     release: unsafe extern "system" fn(this: *mut *const IPluginFactoryVtbl) -> u32,
-    // Métodos de IPluginFactory
     get_factory_info: *const c_void,
     count_classes: unsafe extern "system" fn(this: *mut *const IPluginFactoryVtbl) -> i32,
     get_class_info: unsafe extern "system" fn(
@@ -53,7 +51,6 @@ struct IPluginFactoryVtbl {
 
 #[repr(C)]
 struct IPluginFactory2Vtbl {
-    // Hereda de IPluginFactory (que a su vez hereda de IUnknown)
     query_interface: unsafe extern "system" fn(this: *mut *const IPluginFactory2Vtbl, iid: *const c_void, obj: *mut *mut c_void) -> i32,
     add_ref: unsafe extern "system" fn(this: *mut *const IPluginFactory2Vtbl) -> u32,
     release: unsafe extern "system" fn(this: *mut *const IPluginFactory2Vtbl) -> u32,
@@ -66,7 +63,6 @@ struct IPluginFactory2Vtbl {
         iid: *const c_void,
         obj: *mut *mut c_void,
     ) -> i32,
-    // Métodos de IPluginFactory2
     get_class_info2: unsafe extern "system" fn(
         this: *mut *const IPluginFactory2Vtbl,
         index: i32,
@@ -85,6 +81,17 @@ const IID_IPLUGINFACTORY2: [u8; 16] = [
     0xA4, 0x64, 0xED, 0xB9, 0xF0, 0x0B, 0x2A, 0xBB,
 ];
 
+// IID real de IComponent ("E831FF31-F2D5-4301-928E-BBEE25697802" en vst3-sys).
+// createInstance() debe pedir ESTA interfaz, no IUnknown: pedir IUnknown puede
+// devolver un puntero al vtable "canónico" del objeto COM, que no necesariamente
+// coincide en layout binario con el vtable de IComponent si el plugin implementa
+// herencia múltiple internamente. Esto era la causa probable de fallos silenciosos
+// o crashes al instanciar plugins reales (Vital incluido).
+const IID_ICOMPONENT: [u8; 16] = [
+    0x31, 0xFF, 0x31, 0xE8, 0xD5, 0xF2, 0x01, 0x43,
+    0x92, 0x8E, 0xBB, 0xEE, 0x25, 0x69, 0x78, 0x02,
+];
+
 pub fn enumerate_audio_effects<F>(module: &Module, callback: &mut F) -> Result<(), String>
 where
     F: FnMut(PluginDescriptor),
@@ -94,7 +101,6 @@ where
         return Err("El puntero a la factoría es nulo.".to_string());
     }
 
-    // Casteamos el puntero genérico a nuestro puntero COM de C++ de bajo nivel
     let factory = factory_ptr as *mut *const IPluginFactoryVtbl;
     let mut factory2: *mut *const IPluginFactory2Vtbl = std::ptr::null_mut();
 
@@ -102,7 +108,6 @@ where
         let unknown = factory_ptr as *mut *const IUnknownVtbl;
         let query_interface = (**unknown).query_interface;
 
-        // Intentamos consultar la existencia de IPluginFactory2
         (query_interface)(
             unknown,
             IID_IPLUGINFACTORY2.as_ptr() as *const c_void,
@@ -110,7 +115,6 @@ where
         );
     }
 
-    // Obtenemos la cantidad de clases a través de la vtable
     let num_classes = unsafe {
         let count_classes = (**factory).count_classes;
         (count_classes)(factory)
@@ -129,7 +133,6 @@ where
 
         let mut success = false;
 
-        // Escenario A: Tenemos IPluginFactory2
         if !factory2.is_null() {
             let mut class_info = unsafe { std::mem::zeroed::<PClassInfo2>() };
             let res = unsafe {
@@ -150,7 +153,6 @@ where
             }
         }
 
-        // Escenario B: IPluginFactory básica (v1)
         if !success {
             let mut class_info = unsafe { std::mem::zeroed::<PClassInfo>() };
             let res = unsafe {
@@ -178,7 +180,6 @@ where
         callback(descriptor);
     }
 
-    // Liberamos la interfaz factory2 si fue obtenida mediante query_interface
     if !factory2.is_null() {
         unsafe {
             let unknown2 = factory2 as *mut *const IUnknownVtbl;
@@ -190,8 +191,9 @@ where
     Ok(())
 }
 
-
-/// Crea una instancia del plugin usando su class_id binario
+/// Crea una instancia del plugin usando su class_id binario.
+/// Pide explícitamente la interfaz IComponent (no IUnknown): es la interfaz
+/// que `plugin.rs` espera recibir para construir su `VstPtr<dyn IComponent>`.
 pub fn create_instance(module: &Module, class_id: &[i8; 16]) -> *mut c_void {
     let factory_ptr = module.get_factory_ptr();
     if factory_ptr.is_null() {
@@ -206,7 +208,7 @@ pub fn create_instance(module: &Module, class_id: &[i8; 16]) -> *mut c_void {
         let res = (create_fn)(
             factory,
             class_id.as_ptr(),
-            IID_IUNKNOWN.as_ptr() as *const c_void,
+            IID_ICOMPONENT.as_ptr() as *const c_void,
             &mut obj as *mut *mut c_void,
         );
 

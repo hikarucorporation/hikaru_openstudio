@@ -1,25 +1,12 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 use log::{warn, info};
-use std::ffi::c_void;
 use std::sync::Arc;
 use std::fmt;
-use vst3_sys::base::{kResultOk, IUnknown};
+use vst3_sys::base::{kResultOk, IPluginBase};
 use vst3_sys::vst::{IAudioProcessor, IComponent, ProcessSetup, SymbolicSampleSizes};
 use vst3_sys::{ComInterface, VstPtr};
 use crate::module::Module;
-
-type Tuid = [i8; 16];
-
-pub struct PluginDescriptor {
-    pub name: String,
-    pub class_id: Tuid,
-}
-
-impl fmt::Debug for PluginDescriptor {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("PluginDescriptor").field("name", &self.name).finish()
-    }
-}
+use crate::plugin_descriptor::PluginDescriptor;
 
 pub struct Plugin {
     pub descriptor: Arc<PluginDescriptor>,
@@ -46,21 +33,18 @@ impl Plugin {
                 .ok_or_else(|| format!("{}: Error al instanciar VstPtr para el componente", descriptor.name))?
         };
 
-        let mut processor = None;
-        let mut iid = <dyn IAudioProcessor>::IID;
-        let mut obj: *mut c_void = std::ptr::null_mut();
+        let init_res = unsafe { component.initialize(std::ptr::null_mut()) };
+        if init_res != kResultOk {
+            return Err(format!(
+                "{}: Fallo initialize() en el componente (code {init_res})",
+                descriptor.name
+            ));
+        }
 
-        let res = unsafe { component.query_interface(&mut iid, &mut obj) };
-
-        if res == kResultOk && !obj.is_null() {
-            let proc_ptr: VstPtr<dyn IAudioProcessor> = unsafe {
-                VstPtr::owned(obj as *mut *mut _)
-                    .ok_or_else(|| format!("{}: Error al instanciar VstPtr para el procesador", descriptor.name))?
-            };
-            processor = Some(proc_ptr);
-            info!("Procesador de audio enlazado con éxito para {}", descriptor.name);
-        } else {
-            warn!("{}: El componente no expone la interfaz de procesamiento de audio", descriptor.name);
+        let processor = component.cast::<dyn IAudioProcessor>();
+        match &processor {
+            Some(_) => info!("Procesador de audio enlazado con éxito para {}", descriptor.name),
+            None => warn!("{}: El componente no expone la interfaz de procesamiento de audio", descriptor.name),
         }
 
         Ok(Self { descriptor, component, processor })

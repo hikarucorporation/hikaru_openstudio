@@ -3,6 +3,7 @@ use crate::{
 	theme::Theme,
 };
 use generic_daw_core::DeviceId;
+use vst3_host::default_vst_paths;
 use log::{info, warn};
 use serde::{Deserialize, Serialize};
 use std::{
@@ -35,7 +36,7 @@ impl Default for Config {
 		Self {
 			sample_paths: vec![DATA_DIR.clone()],
 			clap_paths: Vec::new(),
-			vst3_paths: Vec::new(),
+			vst3_paths: default_vst_paths(),
 			input_device: Device::default(),
 			output_device: Device::default(),
 			autosave: Autosave::default(),

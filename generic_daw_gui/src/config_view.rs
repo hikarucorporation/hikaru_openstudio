@@ -63,6 +63,10 @@ pub enum Message {
 	AddClapPath(Arc<Path>),
 	RemoveClapPath(usize),
 	MoveClapPath(DragEvent),
+	AddVst3PathFileDialog,
+	AddVst3Path(Arc<Path>),
+	RemoveVst3Path(usize),
+	MoveVst3Path(DragEvent),
 	ChangedTab(Tab),
 	ChangedId(Option<DeviceId>),
 	ChangedSampleRate(Option<NonZero<u32>>),
@@ -165,6 +169,27 @@ impl ConfigView {
 				} = event && index != target_index
 				{
 					self.config.clap_paths.shift_move(index, target_index);
+				}
+			}
+			Message::AddVst3PathFileDialog => {
+				return window::run(self.main_window_id, |window| {
+					AsyncFileDialog::new().set_parent(window).pick_folder()
+				})
+				.then(Task::future)
+				.and_then(Task::done)
+				.map(|p| p.path().into())
+				.map(Message::AddVst3Path)
+				.into();
+			}
+			Message::AddVst3Path(path) => self.config.vst3_paths.push(path),
+			Message::RemoveVst3Path(index) => _ = self.config.vst3_paths.remove(index),
+			Message::MoveVst3Path(event) => {
+				if let DragEvent::Dropped {
+					index,
+					target_index,
+				} = event && index != target_index
+				{
+					self.config.vst3_paths.shift_move(index, target_index);
 				}
 			}
 			Message::ChangedTab(tab) => self.tab = tab,
@@ -319,6 +344,50 @@ impl ConfigView {
 					)
 					.style(container_with_radius(weak_bordered_box, 5)),
 					rule::horizontal(1),
+					row![
+						"VST3 Plugin Paths",
+						space::horizontal(),
+						button(plus())
+							.style(button_with_radius(button::primary, 5))
+							.padding(0)
+							.on_press(Message::AddVst3PathFileDialog),
+						space().width(5)
+					]
+					.align_y(Center),
+					container(
+						sweeten::column(
+							self.config
+								.vst3_paths
+								.iter()
+								.enumerate()
+								.map(|(index, path)| {
+									row![
+										value(path.display())
+											.font(Font::MONOSPACE)
+											.wrapping(text::Wrapping::None)
+											.ellipsis(text::Ellipsis::Middle)
+											.width(Fill),
+										button(x())
+											.style(button_with_radius(button::danger, 5))
+											.padding(0)
+											.on_press(Message::RemoveVst3Path(index))
+									]
+									.spacing(5)
+									.align_y(Center)
+								})
+								.map(|widget| row![
+									mouse_area(grip_vertical()).interaction(Interaction::Grab),
+									opaque(widget)
+								]
+								.align_y(Center)
+								.into())
+						)
+						.padding(padding::all(5).left(2))
+						.spacing(5)
+						.on_drag(Message::MoveVst3Path)
+						.style(sweeten_column_with_radius(sweeten_column_style, 5))
+					)
+					.style(container_with_radius(weak_bordered_box, 5)),
 					row![
 						button(mic())
 							.style(button_with_radius(button::primary, border::left(5)))
