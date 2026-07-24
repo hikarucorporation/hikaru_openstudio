@@ -1,82 +1,60 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (C) 2026 Hikaru Corporation - OpenStudio VST3 Host
 
-pub mod module;
-pub mod factory;
-pub mod plugin_descriptor;
-pub mod shared;
+use std::{
+    path::{Path, PathBuf},
+    sync::Arc,
+};
+
+pub mod component_handler;
 pub mod audio_thread;
-pub mod plugin;
+pub mod error;
+pub mod factory;
 pub mod host_application;
-pub use vst3_sys; // Esto hace que el módulo sea visible para otros crates
+pub mod module;
+pub mod plugin;
+pub mod plugin_descriptor;
+pub mod scan;
+pub mod shared;
 
-use std::path::{Path, PathBuf};
-use std::sync::Arc;
-use walkdir::WalkDir;
-use crate::plugin_descriptor::PluginDescriptor;
-use crate::module::Module;
-use crate::factory::enumerate_audio_effects;
+pub use plugin_descriptor::PluginDescriptor;
+pub use scan::get_installed_plugins;
 
-/// Escanea los directorios VST3 indicados buscando plugins válidos y ejecuta un callback por cada uno.
-pub fn get_installed_plugins<F>(vst3_paths: &[Arc<Path>], mut callback: F)
-where
-    F: FnMut(PluginDescriptor),
-{
-    // Si la GUI nos pasa rutas personalizadas, las usamos; si no, metemos los defaults.
-    let paths: Vec<PathBuf> = if vst3_paths.is_empty() {
-        let mut defaults = vec![
-            PathBuf::from("/usr/lib/vst3"),
-            PathBuf::from("/usr/local/lib/vst3"),
-        ];
-        if let Some(mut home) = std::env::var_os("HOME").map(PathBuf::from) {
-            home.push(".vst3");
-            defaults.push(home);
-        }
-        defaults
-    } else {
-        vst3_paths.iter().map(|p| p.to_path_buf()).collect()
-    };
-
-    for base_path in paths {
-        if !base_path.exists() {
-            continue;
-        }
-
-        // Buscamos archivos .so dentro de estructuras de directorios .vst3
-        for entry in WalkDir::new(&base_path)
-            .follow_links(true)
-            .into_iter()
-            .filter_map(|e| e.ok())
-        {
-            let path = entry.path();
-            let path_str = path.to_string_lossy();
-            
-            // FILTRO DE SEGURIDAD: Evitamos yabridge para que no reviente el host al intentar cargarlos nativamente.
-            if path_str.contains("yabridge") {
-                continue;
-            }
-
-            // Filtramos librerías dinámicas dentro de bundles .vst3
-            if path.is_file() && path.extension().map_or(false, |ext| ext == "so") {
-                if path_str.contains(".vst3/") {
-                    println!("[DEBUG Scanner] Intentando cargar plugin en: {:?}", path);
-                    
-                    // Cargamos el módulo dinámico de manera segura
-                    if let Ok(module) = Module::load(path) {
-                        // Enlistamos y disparamos el callback que viene del frontend
-                        let _ = enumerate_audio_effects(&module, &mut callback);
-                    }
-                }
-            }
-        }
-    }
+/// Mensajes enviados desde el hilo de audio (o desde callbacks disparados por
+/// el plugin) hacia el hilo principal, análogo a `clap_host::MainThreadMessage`.
+///
+/// Todavía minimalista: hoy nada construye/envía estos mensajes porque
+/// `IComponentHandler` (quien los dispararía vía `restart_component`) no está
+/// implementado aún. Se agranda variante por variante a medida que se cablea
+/// cada callback real, en vez de precompletar variantes sin consumidor.
+#[derive(Clone, Copy, Debug)]
+pub enum MainThreadMessage {
+    /// Espeja `IComponentHandler::restart_component(flags)`: el plugin le
+    /// pide al host que vuelva a leer buses/latencia/parámetros según los
+    /// bits de `vst3_sys::vst::RestartFlags`.
+    RestartComponent(i32),
 }
 
-/// Mensajes enviados desde el hilo de procesamiento de audio o la UI
-/// hacia el hilo principal de la aplicación.
-#[derive(Debug, Clone)]
-pub enum MainThreadMessage {
-    // Podés expandir esto más adelante según tus necesidades de comunicación
-    ParamChanged { index: u32, value: f32 },
-    RestartProcessor,
+/// Rutas de búsqueda estándar de plugins VST/VST3 en Linux.
+/// Se usan únicamente para poblar `Config::vst_paths` en el primer arranque;
+/// a partir de ahí el usuario las gestiona (agregar/quitar/reordenar) como cualquier otra ruta.
+pub fn default_vst_paths() -> Vec<Arc<Path>> {
+    let mut paths = Vec::new();
+
+    if cfg!(unix) {
+        if let Some(home) = std::env::var_os("HOME").map(PathBuf::from) {
+            paths.push(home.join(".vst").into());
+            paths.push(home.join(".vst3").into());
+        }
+
+        paths.push(Path::new("/usr/lib/vst").into());
+        paths.push(Path::new("/usr/lib/vst3").into());
+        paths.push(Path::new("/usr/local/lib/vst3").into());
+    }
+
+    if let Some(vst_path) = std::env::var_os("VST3_PATH") {
+        paths.extend(std::env::split_paths(&vst_path).map(Arc::from));
+    }
+
+    paths
 }

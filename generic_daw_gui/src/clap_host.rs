@@ -17,7 +17,7 @@ use iced::{
 	window,
 };
 use log::info;
-use smol::{Timer, unblock};
+use smol::Timer;
 use std::{
 	collections::{HashMap, HashSet},
 	iter::repeat,
@@ -474,18 +474,9 @@ impl ClapHost {
 		receiver: Receiver<MainThreadMessage>,
 	) -> Task<Message> {
 		self.plugins.insert(id, plugin);
-		let (sender, stream) = smol::channel::unbounded();
-		Task::batch([
-			Task::future(unblock(move || {
-				for msg in receiver {
-					if sender.try_send(msg).is_err() {
-						return;
-					}
-				}
-			}))
-			.discard(),
-			Task::run(stream, move |msg| Message::MainThread(id, Box::new(msg))),
-		])
+		crate::host_bridge::bridge_main_thread_channel(receiver, move |msg| {
+			Message::MainThread(id, Box::new(msg))
+		})
 	}
 
 	pub fn set_render_mode(&mut self, render_mode: RenderMode) {

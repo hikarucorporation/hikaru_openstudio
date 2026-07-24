@@ -14,6 +14,7 @@ mod config;
 mod config_view;
 mod daw;
 mod file_tree;
+mod host_bridge;
 mod icons;
 mod lod;
 mod operation;
